@@ -1,28 +1,57 @@
-2025/10/02-16:02:34.547 139a74f Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/10/02-16:02:34.547 139a74f Recovering log #3
-2025/10/02-16:02:34.549 139a74f Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/000003.log 
-2025/10/02-16:23:17.105 139a751 Level-0 table #5: started
-2025/10/02-16:23:17.131 139a751 Level-0 table #5: 2050867 bytes OK
-2025/10/02-16:23:17.144 139a751 Delete type=0 #3
-2025/10/02-16:38:13.604 139a75a Level-0 table #7: started
-2025/10/02-16:38:13.618 139a75a Level-0 table #7: 1970333 bytes OK
-2025/10/02-16:38:13.623 139a75a Delete type=0 #4
-2025/10/02-16:39:03.762 139a751 Compacting 1@1 + 1@2 files
-2025/10/02-16:39:03.781 139a751 Generated table #8@1: 8786 keys, 2132127 bytes
-2025/10/02-16:39:03.788 139a751 Generated table #9@1: 263 keys, 1448274 bytes
-2025/10/02-16:39:03.795 139a751 Compacted 1@1 + 1@2 files => 3580401 bytes
-2025/10/02-16:39:03.797 139a751 compacted to: files[ 0 0 2 0 0 0 0 ]
-2025/10/02-17:17:05.569 139a751 Level-0 table #11: started
-2025/10/02-17:17:05.596 139a751 Level-0 table #11: 2238663 bytes OK
-2025/10/02-17:17:05.601 139a751 Delete type=0 #6
-2025/10/02-17:17:05.601 139a751 Delete type=2 #7
-2025/10/02-17:17:05.601 139a751 Delete type=2 #5
-2025/10/02-17:17:21.100 139a751 Compacting 1@1 + 2@2 files
-2025/10/02-17:17:21.115 139a751 Generated table #12@1: 12377 keys, 2152206 bytes
-2025/10/02-17:17:21.123 139a751 Generated table #13@1: 151 keys, 2137430 bytes
-2025/10/02-17:17:21.129 139a751 Generated table #14@1: 412 keys, 1320560 bytes
-2025/10/02-17:17:21.129 139a751 Compacted 1@1 + 2@2 files => 5610196 bytes
-2025/10/02-17:17:21.130 139a751 compacted to: files[ 0 0 3 0 0 0 0 ]
-2025/10/02-17:17:21.131 139a751 Delete type=2 #11
-2025/10/02-17:17:21.131 139a751 Delete type=2 #8
-2025/10/02-17:17:21.131 139a751 Delete type=2 #9
+2025/10/02-22:48:10.795 13f51fe Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/10/02-22:48:10.795 13f51fe Recovering log #16
+2025/10/02-22:48:10.798 13f51fe Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/000016.log 
+2025/10/02-23:03:23.064 13f5200 Level-0 table #24: started
+2025/10/02-23:03:23.083 13f5200 Level-0 table #24: 1893104 bytes OK
+2025/10/02-23:03:23.086 13f5200 Delete type=0 #16
+2025/10/02-23:03:28.071 13f5200 Compacting 1@1 + 4@2 files
+2025/10/02-23:03:28.088 13f5200 Generated table #25@1: 5127 keys, 2130817 bytes
+2025/10/02-23:03:28.099 13f5200 Generated table #26@1: 15767 keys, 2136441 bytes
+2025/10/02-23:03:28.106 13f5200 Generated table #27@1: 131 keys, 2124330 bytes
+2025/10/02-23:03:28.116 13f5200 Generated table #28@1: 144 keys, 2126357 bytes
+2025/10/02-23:03:28.119 13f5200 Generated table #29@1: 507 keys, 816151 bytes
+2025/10/02-23:03:28.119 13f5200 Compacted 1@1 + 4@2 files => 9334096 bytes
+2025/10/02-23:03:28.120 13f5200 compacted to: files[ 0 0 5 0 0 0 0 ]
+2025/10/02-23:03:28.121 13f5200 Delete type=2 #20
+2025/10/02-23:03:28.121 13f5200 Delete type=2 #21
+2025/10/02-23:03:28.121 13f5200 Delete type=2 #19
+2025/10/02-23:03:28.121 13f5200 Delete type=2 #18
+2025/10/02-23:03:28.121 13f5200 Delete type=2 #24
+2025/10/02-23:20:13.459 13f5200 Level-0 table #31: started
+2025/10/02-23:20:13.474 13f5200 Level-0 table #31: 1801432 bytes OK
+2025/10/02-23:20:13.477 13f5200 Delete type=0 #23
+2025/10/02-23:20:23.290 13f5200 Compacting 1@1 + 5@2 files
+2025/10/02-23:20:23.310 13f5200 Generated table #32@1: 5107 keys, 2130542 bytes
+2025/10/02-23:20:23.326 13f5200 Generated table #33@1: 20590 keys, 2165947 bytes
+2025/10/02-23:20:23.332 13f5200 Generated table #34@1: 141 keys, 2127704 bytes
+2025/10/02-23:20:23.341 13f5200 Generated table #35@1: 162 keys, 2140321 bytes
+2025/10/02-23:20:23.347 13f5200 Generated table #36@1: 121 keys, 2110882 bytes
+2025/10/02-23:20:23.348 13f5200 Generated table #37@1: 539 keys, 189092 bytes
+2025/10/02-23:20:23.349 13f5200 Compacted 1@1 + 5@2 files => 10864488 bytes
+2025/10/02-23:20:23.350 13f5200 compacted to: files[ 0 0 6 0 0 0 0 ]
+2025/10/02-23:20:23.350 13f5200 Delete type=2 #29
+2025/10/02-23:20:23.350 13f5200 Delete type=2 #28
+2025/10/02-23:20:23.350 13f5200 Delete type=2 #26
+2025/10/02-23:20:23.350 13f5200 Delete type=2 #27
+2025/10/02-23:20:23.350 13f5200 Delete type=2 #31
+2025/10/02-23:20:23.350 13f5200 Delete type=2 #25
+2025/10/03-00:15:52.752 13f51fe Level-0 table #39: started
+2025/10/03-00:15:52.763 13f51fe Level-0 table #39: 2191325 bytes OK
+2025/10/03-00:15:52.770 13f51fe Delete type=0 #30
+2025/10/03-00:17:36.412 13f5200 Compacting 1@1 + 6@2 files
+2025/10/03-00:17:36.429 13f5200 Generated table #40@1: 5104 keys, 2130504 bytes
+2025/10/03-00:17:36.451 13f5200 Generated table #41@1: 15900 keys, 2144039 bytes
+2025/10/03-00:17:36.458 13f5200 Generated table #42@1: 8461 keys, 2128303 bytes
+2025/10/03-00:17:36.466 13f5200 Generated table #43@1: 156 keys, 2109938 bytes
+2025/10/03-00:17:36.473 13f5200 Generated table #44@1: 124 keys, 2112770 bytes
+2025/10/03-00:17:36.478 13f5200 Generated table #45@1: 187 keys, 2145518 bytes
+2025/10/03-00:17:36.480 13f5200 Generated table #46@1: 685 keys, 78989 bytes
+2025/10/03-00:17:36.480 13f5200 Compacted 1@1 + 6@2 files => 12850061 bytes
+2025/10/03-00:17:36.481 13f5200 compacted to: files[ 0 0 7 0 0 0 0 ]
+2025/10/03-00:17:36.482 13f5200 Delete type=2 #39
+2025/10/03-00:17:36.482 13f5200 Delete type=2 #34
+2025/10/03-00:17:36.482 13f5200 Delete type=2 #35
+2025/10/03-00:17:36.482 13f5200 Delete type=2 #37
+2025/10/03-00:17:36.482 13f5200 Delete type=2 #36
+2025/10/03-00:17:36.482 13f5200 Delete type=2 #32
+2025/10/03-00:17:36.482 13f5200 Delete type=2 #33

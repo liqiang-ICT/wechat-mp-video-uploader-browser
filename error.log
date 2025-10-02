@@ -209,3 +209,23 @@
     at async Binding.run (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Binding.js:132:32)
     at async #onBindingCalled (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:637:9)
 ----------------------------------------
+[2025-10-02T14:28:14.586Z] 错误: 启动浏览器在3次尝试后仍然失败: The browser is already running for /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759415250343_r7lxzvefu. Use a different `userDataDir` or stop the running browser first.
+堆栈跟踪: Error: 启动浏览器在3次尝试后仍然失败: The browser is already running for /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759415250343_r7lxzvefu. Use a different `userDataDir` or stop the running browser first.
+    at withRetry (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:587:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async switchToAccount (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:1148:25)
+    at async handleAction (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:850:13)
+    at async Binding.<anonymous> (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:691:17)
+    at async Binding.run (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Binding.js:132:32)
+    at async #onBindingCalled (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:637:9)
+----------------------------------------
+[2025-10-02T14:28:20.475Z] 错误: 启动浏览器在3次尝试后仍然失败: The browser is already running for /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759415250343_r7lxzvefu. Use a different `userDataDir` or stop the running browser first.
+堆栈跟踪: Error: 启动浏览器在3次尝试后仍然失败: The browser is already running for /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759415250343_r7lxzvefu. Use a different `userDataDir` or stop the running browser first.
+    at withRetry (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:587:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async switchToAccount (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:1148:25)
+    at async handleAction (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:850:13)
+    at async Binding.<anonymous> (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/wechat-mp-puppeteer-controller.js:691:17)
+    at async Binding.run (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Binding.js:132:32)
+    at async #onBindingCalled (/Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:637:9)
+----------------------------------------

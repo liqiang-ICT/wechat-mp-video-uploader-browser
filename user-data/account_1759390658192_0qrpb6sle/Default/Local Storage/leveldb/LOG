@@ -1,3 +1,9 @@
-2025/10/02-16:02:30.192 139a79c Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Local Storage/leveldb/MANIFEST-000001
-2025/10/02-16:02:30.194 139a79c Recovering log #3
-2025/10/02-16:02:30.194 139a79c Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Local Storage/leveldb/000003.log 
+2025/10/02-22:48:06.421 13f524b Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Local Storage/leveldb/MANIFEST-000001
+2025/10/02-22:48:06.423 13f524b Recovering log #3
+2025/10/02-22:48:06.424 13f524b Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Local Storage/leveldb/000003.log 
+2025/10/02-23:39:06.192 13f524e Level-0 table #5: started
+2025/10/02-23:39:06.200 13f524e Level-0 table #5: 9889 bytes OK
+2025/10/02-23:39:06.202 13f524e Delete type=0 #3
+2025/10/02-23:59:44.937 13f524e Level-0 table #7: started
+2025/10/02-23:59:44.941 13f524e Level-0 table #7: 14558 bytes OK
+2025/10/02-23:59:44.951 13f524e Delete type=0 #4

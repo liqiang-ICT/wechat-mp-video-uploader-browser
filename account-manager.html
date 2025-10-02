@@ -478,42 +478,56 @@
         }
         
         // 加载账号列表
-        async function loadAccounts() {
+        function loadAccounts() {
+            console.log('开始加载账号列表');
             showLoading();
             
-            try {
-                // 在Electron环境中，通过ipcRenderer与主进程通信获取账号列表
-                // 在Node.js环境中，直接使用全局变量
-                let accounts = [];
-                
-                // 检查是否在Node.js环境中
-                if (typeof window.__ACCOUNTS__ !== 'undefined') {
-                    accounts = window.__ACCOUNTS__;
-                } else {
-                    // 模拟数据加载 - 实际环境中会通过API或IPC获取
-                    // 正式环境中，直接使用空数组，由Node.js环境注入实际账号数据
-                    accounts = [];
-                    
-                    // 从localStorage获取账号数据（仅用于开发环境测试）
-                    const accountsStr = localStorage.getItem('wechat-mp-accounts');
-                    if (accountsStr) {
-                        accounts = JSON.parse(accountsStr);
-                    }
+            // 尝试从Node.js后端获取最新的账号数据
+            if (typeof window !== 'undefined' && typeof window.getLatestAccounts === 'function') {
+                console.log('调用window.getLatestAccounts获取最新账号数据');
+                try {
+                    // 注意：这里不能直接await，因为是从页面调用Node.js函数
+                    window.getLatestAccounts().then((accountsData) => {
+                        console.log('成功获取最新账号数据:', accountsData);
+                        window.__ACCOUNTS__ = accountsData;
+                        renderAccounts(accountsData);
+                        hideLoading();
+                    }).catch((error) => {
+                        console.error('获取最新账号数据失败:', error);
+                        // 失败时回退到使用本地数据
+                        fallbackToLocalAccounts();
+                    });
+                } catch (callError) {
+                    console.error('调用getLatestAccounts时出错:', callError);
+                    fallbackToLocalAccounts();
                 }
-                
-                renderAccounts(accounts);
-            } catch (error) {
-                console.error('加载账号列表失败:', error);
-                accountsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">⚠️</div>
-                        <h3>加载失败</h3>
-                        <p>加载账号列表时发生错误，请点击刷新按钮重试</p>
-                    </div>
-                `;
-            } finally {
-                hideLoading();
+            } else {
+                // 如果getLatestAccounts函数不可用，回退到本地数据
+                fallbackToLocalAccounts();
             }
+        }
+        
+        // 回退到本地账号数据的函数
+        function fallbackToLocalAccounts() {
+            console.log('回退到使用本地账号数据');
+            let accounts = [];
+            
+            // 1. 优先使用window.__ACCOUNTS__（Node.js环境）
+            if (typeof window !== 'undefined' && window.__ACCOUNTS__) {
+                console.log('使用window.__ACCOUNTS__数据');
+                accounts = window.__ACCOUNTS__;
+            } 
+            // 2. 其次使用localStorage（纯浏览器环境）
+            else if (typeof localStorage !== 'undefined') {
+                console.log('使用localStorage数据');
+                const accountsStr = localStorage.getItem('wechat-mp-accounts');
+                if (accountsStr) {
+                    accounts = JSON.parse(accountsStr);
+                }
+            }
+            
+            renderAccounts(accounts);
+            hideLoading();
         }
         
         // 渲染账号列表

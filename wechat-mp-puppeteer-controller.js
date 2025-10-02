@@ -753,6 +753,22 @@ const startAccountManager = async () => {
             }
         });
         
+        // 注入getLatestAccounts函数到浏览器窗口对象，用于获取最新的账号数据
+        await page.exposeFunction('getLatestAccounts', async () => {
+            try {
+                log('前端请求获取最新账号数据');
+                // 直接从文件系统重新读取最新的账号数据
+                const latestAccounts = accountManager.getAllAccounts();
+                log(`成功获取最新账号数据，共${latestAccounts.length}个账号`);
+                return latestAccounts;
+            } catch (error) {
+                log(`获取最新账号数据失败: ${error.message}`);
+                console.error('获取最新账号数据错误:', error);
+                // 返回空数组避免前端出错
+                return [];
+            }
+        });
+        
         // 打开账号管理页面
         await page.goto(`file://${tempHtmlPath}`, { timeout: config.timeout });
         
@@ -883,39 +899,34 @@ const addNewAccount = async () => {
         const userDataDir = accountManager.createUserDataDir(newAccountId);
         log(`为新账号创建用户数据目录: ${userDataDir}`);
         
-        // 检查是否已有全局浏览器实例，如果没有则创建
-        if (!globalBrowser || !globalBrowser.isConnected()) {
-            globalBrowser = await withRetry(async () => {
-                return await puppeteer.launch({
-                    headless: config.headless,
-                    defaultViewport: null,
-                    args: ['--start-maximized'],
-                    executablePath: chromePath || undefined
-                    // 不指定用户数据目录，让所有账号共享同一个浏览器实例
-                });
-            }, '启动浏览器');
-            
-            // 监听浏览器关闭事件
-            globalBrowser.on('disconnected', () => {
-                log('浏览器已关闭');
-                globalBrowser = null;
-                activeAccountPages.clear();
+        // 为新账号创建独立的浏览器实例，指定用户数据目录
+        log('创建新的浏览器实例用于新账号登录...');
+        const accountBrowser = await withRetry(async () => {
+            return await puppeteer.launch({
+                headless: config.headless,
+                defaultViewport: null,
+                args: [
+                    '--start-maximized',
+                    `--user-data-dir=${userDataDir}`
+                ],
+                executablePath: chromePath || undefined
             });
-        }
+        }, '启动浏览器实例');
         
-        // 在现有的浏览器实例中创建新标签页
-        const page = await globalBrowser.newPage();
+        // 在新创建的浏览器实例中创建页面
+        const page = await accountBrowser.newPage();
         
         // 导航到微信公众号登录页
         await page.goto('https://mp.weixin.qq.com/');
         await wait(2000);
         
         // 等待用户登录
+        log('请在新打开的浏览器窗口中扫码登录...');
         const loggedIn = await waitForLogin(page);
         if (!loggedIn) {
-            log('登录失败或未检测到登录状态，程序将在10秒后退出');
-            await wait(10000);
-            await globalBrowser.close();
+            log('登录失败或未检测到登录状态');
+            await wait(5000);
+            await accountBrowser.close();
             return;
         }
         
@@ -937,12 +948,13 @@ const addNewAccount = async () => {
         const saved = accountManager.addAccount(fullAccountInfo);
         if (saved) {
             log(`账号信息保存成功: ${accountInfo.name} (${accountInfo.wechatId})`);
+            log(`账号数据目录: ${userDataDir}`);
         } else {
             log('账号信息保存失败');
         }
         
-        // 登录成功后，继续执行
-        log('开始监测页面URL变化...');
+        // 将账号页面添加到活跃账号映射中
+        activeAccountPages.set(newAccountId, { page, browser: accountBrowser });
         
         // 在页面中插入状态显示和操作面板
         await withRetry(async () => {
@@ -973,15 +985,10 @@ const addNewAccount = async () => {
                 // 状态信息
                 const statusInfo = document.createElement('div');
                 statusInfo.id = 'status-info';
-                statusInfo.textContent = '状态：运行中，监测页面URL变化...';
+                statusInfo.textContent = '状态：账号添加完成，登录信息已保存';
                 statusInfo.style.marginBottom = '15px';
                 statusInfo.style.fontSize = '13px';
                 statusInfo.style.color = '#666';
-                
-                // 视频目录信息
-                const videoDirInfo = document.createElement('div');
-                videoDirInfo.innerHTML = `<strong>视频目录:</strong> <span style="font-size: 12px; color: #999;">${videoDirectory}</span>`;
-                videoDirInfo.style.marginBottom = '15px';
                 
                 // 操作按钮容器
                 const actionsContainer = document.createElement('div');
@@ -1036,10 +1043,9 @@ const addNewAccount = async () => {
                 helpButton.addEventListener('click', () => {
                     alert(
                         '使用说明：\n\n' +
-                        '1. 登录后，程序会自动监测页面URL变化\n' +
-                        '2. 当访问视频素材管理页面时，会自动注入批量上传工具\n' +
-                        '3. 当访问用户管理页面时，会自动注入批量打标签工具\n' +
-                        '4. 操作完成后，按Enter键退出程序\n' +
+                        '1. 账号添加完成后，登录状态已保存\n' +
+                        '2. 您可以关闭当前窗口，稍后通过账号管理页面切换到此账号\n' +
+                        '3. 下次切换到此账号时，无需重新登录\n' +
                         '\n注意：请确保Chrome浏览器版本与Puppeteer兼容'
                     );
                 });
@@ -1051,15 +1057,16 @@ const addNewAccount = async () => {
                 // 添加到控制面板
                 controlPanel.appendChild(title);
                 controlPanel.appendChild(statusInfo);
-                // controlPanel.appendChild(videoDirInfo);
-                // controlPanel.appendChild(actionsContainer);
                 
                 document.body.appendChild(controlPanel);
             }, config.videoDirectory);
         }, '创建操作面板');
         
-        // 开始监测页面URL变化
-        await monitorPageUrl(page, globalBrowser);
+        log('账号添加完成，登录状态已保存');
+        log('您可以关闭当前窗口，稍后通过账号管理页面切换到此账号');
+        
+        // 启动监测页面URL变化
+        await monitorPageUrl(page, accountBrowser);
         
     } catch (error) {
         log(`程序运行出错: ${error.message}`);

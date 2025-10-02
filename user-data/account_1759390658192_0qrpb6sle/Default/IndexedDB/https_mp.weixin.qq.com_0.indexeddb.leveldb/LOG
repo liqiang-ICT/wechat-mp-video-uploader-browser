@@ -1,0 +1,28 @@
+2025/10/02-16:02:34.547 139a74f Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/10/02-16:02:34.547 139a74f Recovering log #3
+2025/10/02-16:02:34.549 139a74f Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/000003.log 
+2025/10/02-16:23:17.105 139a751 Level-0 table #5: started
+2025/10/02-16:23:17.131 139a751 Level-0 table #5: 2050867 bytes OK
+2025/10/02-16:23:17.144 139a751 Delete type=0 #3
+2025/10/02-16:38:13.604 139a75a Level-0 table #7: started
+2025/10/02-16:38:13.618 139a75a Level-0 table #7: 1970333 bytes OK
+2025/10/02-16:38:13.623 139a75a Delete type=0 #4
+2025/10/02-16:39:03.762 139a751 Compacting 1@1 + 1@2 files
+2025/10/02-16:39:03.781 139a751 Generated table #8@1: 8786 keys, 2132127 bytes
+2025/10/02-16:39:03.788 139a751 Generated table #9@1: 263 keys, 1448274 bytes
+2025/10/02-16:39:03.795 139a751 Compacted 1@1 + 1@2 files => 3580401 bytes
+2025/10/02-16:39:03.797 139a751 compacted to: files[ 0 0 2 0 0 0 0 ]
+2025/10/02-17:17:05.569 139a751 Level-0 table #11: started
+2025/10/02-17:17:05.596 139a751 Level-0 table #11: 2238663 bytes OK
+2025/10/02-17:17:05.601 139a751 Delete type=0 #6
+2025/10/02-17:17:05.601 139a751 Delete type=2 #7
+2025/10/02-17:17:05.601 139a751 Delete type=2 #5
+2025/10/02-17:17:21.100 139a751 Compacting 1@1 + 2@2 files
+2025/10/02-17:17:21.115 139a751 Generated table #12@1: 12377 keys, 2152206 bytes
+2025/10/02-17:17:21.123 139a751 Generated table #13@1: 151 keys, 2137430 bytes
+2025/10/02-17:17:21.129 139a751 Generated table #14@1: 412 keys, 1320560 bytes
+2025/10/02-17:17:21.129 139a751 Compacted 1@1 + 2@2 files => 5610196 bytes
+2025/10/02-17:17:21.130 139a751 compacted to: files[ 0 0 3 0 0 0 0 ]
+2025/10/02-17:17:21.131 139a751 Delete type=2 #11
+2025/10/02-17:17:21.131 139a751 Delete type=2 #8
+2025/10/02-17:17:21.131 139a751 Delete type=2 #9

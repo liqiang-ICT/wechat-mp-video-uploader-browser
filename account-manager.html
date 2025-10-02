@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信公众号账号管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1aad19 0%, #07c160 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: #1aad19;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #179516;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(26, 173, 25, 0.3);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #e0e0e0;
+            color: #666;
+        }
+        
+        .btn-outline:hover {
+            border-color: #1aad19;
+            color: #1aad19;
+            background-color: #f6ffed;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .account-card {
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .account-card:hover {
+            border-color: #1aad19;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .account-card.selected {
+            border-color: #1aad19;
+            box-shadow: 0 0 0 2px rgba(26, 173, 25, 0.1);
+            background-color: #f6ffed;
+        }
+        
+        .account-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #e8e8e8;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .account-info {
+            flex: 1;
+        }
+        
+        .account-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #333;
+        }
+        
+        .wechat-id {
+            font-size: 13px;
+            color: #888;
+        }
+        
+        .account-meta {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .last-login {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .card-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .card-action-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            opacity: 0;
+        }
+        
+        .account-card:hover .card-action-btn {
+            opacity: 1;
+        }
+        
+        .card-action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .delete-btn:hover {
+            background-color: #ffefef;
+            color: #e74c3c;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #999;
+        }
+        
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+        
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .close-btn:hover {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #1aad19;
+            box-shadow: 0 0 0 2px rgba(26, 173, 25, 0.1);
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            z-index: 100;
+        }
+        
+        .loading.show {
+            display: flex;
+        }
+        
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #1aad19;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn {
+                justify-content: center;
+            }
+            
+            .accounts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>微信公众号账号管理</h1>
+            <p>管理您的多个微信公众号账号，一键切换登录状态</p>
+        </div>
+        
+        <div class="content">
+            <div class="actions">
+                <button id="addAccountBtn" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    新增账号
+                </button>
+                
+                <div>
+                    <button id="refreshBtn" class="btn btn-outline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        刷新列表
+                    </button>
+                </div>
+            </div>
+            
+            <div class="loading" id="loadingIndicator">
+                加载中...
+            </div>
+            
+            <div id="accountsContainer" class="accounts-grid">
+                <!-- 账号卡片将通过JavaScript动态生成 -->
+                <div class="empty-state">
+                    <div class="icon">📱</div>
+                    <h3>暂无账号</h3>
+                    <p>点击"新增账号"按钮，开始添加您的微信公众号账号</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">确认删除</h3>
+                <button class="close-btn" id="closeDeleteModal">&times;</button>
+            </div>
+            
+            <p>您确定要删除这个微信公众号账号吗？此操作将删除所有与该账号相关的本地数据，且无法恢复。</p>
+            
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="cancelDeleteBtn">取消</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">确认删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 当前选中的账号ID
+        let selectedAccountId = null;
+        let accountToDelete = null;
+        
+        // DOM元素
+        const accountsContainer = document.getElementById('accountsContainer');
+        const addAccountBtn = document.getElementById('addAccountBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeDeleteModalBtn = document.getElementById('closeDeleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        
+        // 初始化页面
+        function initPage() {
+            loadAccounts();
+            setupEventListeners();
+        }
+        
+        // 加载账号列表
+        async function loadAccounts() {
+            showLoading();
+            
+            try {
+                // 在Electron环境中，通过ipcRenderer与主进程通信获取账号列表
+                // 在Node.js环境中，直接使用全局变量
+                let accounts = [];
+                
+                // 检查是否在Node.js环境中
+                if (typeof window.__ACCOUNTS__ !== 'undefined') {
+                    accounts = window.__ACCOUNTS__;
+                } else {
+                    // 模拟数据加载 - 实际环境中会通过API或IPC获取
+                    // 正式环境中，直接使用空数组，由Node.js环境注入实际账号数据
+                    accounts = [];
+                    
+                    // 从localStorage获取账号数据（仅用于开发环境测试）
+                    const accountsStr = localStorage.getItem('wechat-mp-accounts');
+                    if (accountsStr) {
+                        accounts = JSON.parse(accountsStr);
+                    }
+                }
+                
+                renderAccounts(accounts);
+            } catch (error) {
+                console.error('加载账号列表失败:', error);
+                accountsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚠️</div>
+                        <h3>加载失败</h3>
+                        <p>加载账号列表时发生错误，请点击刷新按钮重试</p>
+                    </div>
+                `;
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // 渲染账号列表
+        function renderAccounts(accounts) {
+            accountsContainer.innerHTML = '';
+            
+            if (accounts.length === 0) {
+                accountsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📱</div>
+                        <h3>暂无账号</h3>
+                        <p>点击"新增账号"按钮，开始添加您的微信公众号账号</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 按最后登录时间排序，最近登录的在前
+            const sortedAccounts = [...accounts].sort((a, b) => 
+                new Date(b.lastLogin) - new Date(a.lastLogin)
+            );
+            
+            sortedAccounts.forEach(account => {
+                const card = document.createElement('div');
+                card.className = `account-card ${selectedAccountId === account.id ? 'selected' : ''}`;
+                card.dataset.id = account.id;
+                
+                // 格式化最后登录时间
+                const lastLogin = new Date(account.lastLogin);
+                const formattedLastLogin = lastLogin.toLocaleString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                card.innerHTML = `
+                    <div class="card-actions">
+                        <button class="card-action-btn delete-btn" title="删除账号">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="account-header">
+                        <div class="avatar">
+                            ${account.avatar ? 
+                                `<img src="${account.avatar}" alt="${account.name}" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMCAyMXYtMmE0IDQgMCAwIDAtNCA0SDhhNCA0IDAgMCAwLTQgNHYyIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+';">` : 
+                                `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`
+                            }
+                        </div>
+                        <div class="account-info">
+                            <div class="account-name">${account.name || '未知公众号'}</div>
+                            <div class="wechat-id">
+                                ${account.wechatId && account.wechatId !== 'unknown' ? `微信ID: ${account.wechatId}` : '微信ID: 未获取到'}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="account-meta">
+                        <span class="last-login">最后登录: ${formattedLastLogin}</span>
+                    </div>
+                `;
+                
+                accountsContainer.appendChild(card);
+            });
+            
+            // 为新添加的元素绑定事件
+            bindAccountCardEvents();
+        }
+        
+        // 为账号卡片绑定事件
+        function bindAccountCardEvents() {
+            const accountCards = document.querySelectorAll('.account-card');
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            
+            // 账号卡片点击事件
+            accountCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // 如果点击的是删除按钮，不触发账号选择
+                    if (e.target.closest('.delete-btn')) {
+                        return;
+                    }
+                    
+                    const accountId = card.dataset.id;
+                    selectAccount(accountId);
+                });
+            });
+            
+            // 删除按钮点击事件
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation(); // 阻止事件冒泡
+                    const card = button.closest('.account-card');
+                    accountToDelete = card.dataset.id;
+                    openDeleteModal();
+                });
+            });
+        }
+        
+        // 选择账号
+        function selectAccount(accountId) {
+            selectedAccountId = accountId;
+            
+            // 更新UI状态
+            document.querySelectorAll('.account-card').forEach(card => {
+                card.classList.toggle('selected', card.dataset.id === accountId);
+            });
+            
+            // 触发账号切换逻辑
+            // 在Node.js环境中，通过全局函数通知主进程
+            if (typeof window.switchToAccount === 'function') {
+                window.switchToAccount(accountId);
+            } else {
+                console.log(`选择账号: ${accountId}`);
+                // 在浏览器环境中，可以显示一个提示
+                alert(`已选择账号: ${accountId}，实际环境中将加载该账号的登录状态`);
+            }
+        }
+        
+        // 添加新账号
+        function addAccount() {
+            try {
+                // 检测Node.js环境，通过全局函数通知主进程
+                if (typeof window !== 'undefined' && typeof window.addNewAccount === 'function') {
+                    window.addNewAccount();
+                } else {
+                    console.log('添加新账号');
+                    alert('添加新账号，实际环境中将打开微信公众号登录页面');
+                }
+            } catch (error) {
+                console.error('调用添加账号函数失败:', error);
+                alert('添加账号时发生错误，请稍后重试');
+            }
+        }
+        
+        // 删除账号 - 重命名以避免与window.deleteAccount冲突
+        function handleDeleteAccount(accountId) {
+            console.log(`前端调用handleDeleteAccount函数，账号ID: ${accountId}`);
+            // 在Node.js环境中，通过全局函数通知主进程
+            if (typeof window.deleteAccount === 'function') {
+                console.log(`window.deleteAccount函数存在，准备调用`);
+                try {
+                    window.deleteAccount(accountId);
+                    console.log(`window.deleteAccount函数调用完成`);
+                } catch (error) {
+                    console.error(`调用window.deleteAccount函数失败: ${error.message}`);
+                    alert(`删除账号时发生错误: ${error.message}`);
+                }
+            } else {
+                console.log(`删除账号: ${accountId}`);
+                // 在浏览器环境中，模拟删除并刷新列表
+                const accountsStr = localStorage.getItem('wechat-mp-accounts');
+                if (accountsStr) {
+                    let accounts = JSON.parse(accountsStr);
+                    accounts = accounts.filter(account => account.id !== accountId);
+                    localStorage.setItem('wechat-mp-accounts', JSON.stringify(accounts));
+                }
+                loadAccounts();
+            }
+        }
+        
+        // 打开删除确认弹窗
+        function openDeleteModal() {
+            deleteModal.style.display = 'flex';
+        }
+        
+        // 关闭删除确认弹窗
+        function closeDeleteModal() {
+            deleteModal.style.display = 'none';
+            accountToDelete = null;
+        }
+        
+        // 显示加载状态
+        function showLoading() {
+            loadingIndicator.classList.add('show');
+        }
+        
+        // 隐藏加载状态
+        function hideLoading() {
+            loadingIndicator.classList.remove('show');
+        }
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 添加账号按钮点击事件
+            addAccountBtn.addEventListener('click', addAccount);
+            
+            // 刷新按钮点击事件
+            refreshBtn.addEventListener('click', loadAccounts);
+            
+            // 删除弹窗事件
+            closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+            cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (accountToDelete) {
+                    handleDeleteAccount(accountToDelete);
+                    closeDeleteModal();
+                }
+            });
+            
+            // 点击弹窗外部关闭弹窗
+            deleteModal.addEventListener('click', (e) => {
+                if (e.target === deleteModal) {
+                    closeDeleteModal();
+                }
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面DOMContentLoaded事件触发，开始初始化');
+            
+            // 检查window.deleteAccount函数是否存在
+            console.log('页面加载时检查window.deleteAccount函数:', typeof window.deleteAccount);
+            
+            // 定期检查window.deleteAccount函数是否被注入
+            let checkInterval = setInterval(() => {
+                console.log('检查window.deleteAccount函数状态:', typeof window.deleteAccount);
+                if (typeof window.deleteAccount === 'function') {
+                    console.log('window.deleteAccount函数已成功注入');
+                    clearInterval(checkInterval);
+                }
+            }, 1000);
+            
+            initPage();
+        });
+        
+        // 暴露一些函数给外部使用
+        window.refreshAccountsList = loadAccounts;
+    </script>
+</body>
+</html>

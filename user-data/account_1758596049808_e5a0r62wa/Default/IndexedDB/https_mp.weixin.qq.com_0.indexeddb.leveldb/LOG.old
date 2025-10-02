@@ -1,0 +1,21 @@
+2025/10/02-01:57:52.894 1376c34 Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1758596049808_e5a0r62wa/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/10/02-01:57:52.894 1376c34 Recovering log #22
+2025/10/02-01:57:52.898 1376c34 Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1758596049808_e5a0r62wa/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/000022.log 
+2025/10/02-02:05:47.731 1376c30 Level-0 table #31: started
+2025/10/02-02:05:47.756 1376c30 Level-0 table #31: 2331911 bytes OK
+2025/10/02-02:05:47.760 1376c30 Delete type=0 #22
+2025/10/02-02:05:58.529 1376c34 Compacting 1@1 + 5@2 files
+2025/10/02-02:05:58.554 1376c34 Generated table #32@1: 6894 keys, 2134969 bytes
+2025/10/02-02:05:58.567 1376c34 Generated table #33@1: 17168 keys, 2140725 bytes
+2025/10/02-02:05:58.573 1376c34 Generated table #34@1: 191 keys, 2132141 bytes
+2025/10/02-02:05:58.582 1376c34 Generated table #35@1: 160 keys, 2108067 bytes
+2025/10/02-02:05:58.589 1376c34 Generated table #36@1: 151 keys, 2135172 bytes
+2025/10/02-02:05:58.596 1376c34 Generated table #37@1: 780 keys, 1762040 bytes
+2025/10/02-02:05:58.596 1376c34 Compacted 1@1 + 5@2 files => 12413114 bytes
+2025/10/02-02:05:58.598 1376c34 compacted to: files[ 0 0 6 0 0 0 0 ]
+2025/10/02-02:05:58.598 1376c34 Delete type=2 #28
+2025/10/02-02:05:58.598 1376c34 Delete type=2 #26
+2025/10/02-02:05:58.598 1376c34 Delete type=2 #27
+2025/10/02-02:05:58.598 1376c34 Delete type=2 #31
+2025/10/02-02:05:58.598 1376c34 Delete type=2 #25
+2025/10/02-02:05:58.598 1376c34 Delete type=2 #24

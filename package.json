@@ -1,0 +1,46 @@
+{
+  "name": "wechat-mp-video-uploader",
+  "version": "1.0.0",
+  "description": "自动上传视频到微信公众号",
+  "main": "main.js",
+  "bin": "wechat-mp-puppeteer-controller.js",
+  "scripts": {
+    "start": "node wechat-video-uploader.js",
+    "electron": "electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "pkg": {
+    "assets": [
+      "wechat-video-uploader.js",
+      "chrome-debug-uploader.js",
+      "wechat-mp-auto-injector.js"
+    ]
+  },
+  "dependencies": {
+    "puppeteer": "^24.0.0"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  },
+  "build": {
+    "appId": "com.wechatmp.videouploader",
+    "productName": "微信公众号视频批量上传工具",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico"
+    }
+  },
+  "license": "MIT"
+}

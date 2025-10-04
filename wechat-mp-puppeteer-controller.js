@@ -177,6 +177,7 @@ const setupPageListeners = async (page) => {
         await checkAndProcessPage(page);
     });
     
+    /*
     // 添加定时检查作为备用机制，每5秒检查一次
     const periodicCheck = async () => {
         while (true) {
@@ -218,6 +219,7 @@ const setupPageListeners = async (page) => {
     
     // 启动定时检查
     periodicCheck();
+    */
 };
 
 // 监测页面URL变化和新标签页创建
@@ -228,7 +230,7 @@ const monitorPageUrl = async (page, browser) => {
     await setupPageListeners(page);
     
     // 监听新标签页创建事件
-    globalBrowser.on('targetcreated', async (target) => {
+    browser.on('targetcreated', async (target) => {
         try {
             // 只处理页面类型的目标
             if (target.type() === 'page') {
@@ -315,17 +317,6 @@ const injectAndExecuteUploaderScript = async (page) => {
             return;
         }
         
-        // 清除旧的按钮和注入标记
-        await page.evaluate(() => {
-            // 移除旧的上传按钮
-            const oldButton = document.getElementById('batch-upload-button');
-            if (oldButton) {
-                oldButton.remove();
-            }
-            // 清除注入标记
-            window.chromeDebugUploaderInjected = false;
-        });
-        
         log('准备注入视频上传脚本...');
         
         // 读取chrome-debug-uploader.js文件内容
@@ -342,55 +333,9 @@ const injectAndExecuteUploaderScript = async (page) => {
             const script = document.createElement('script');
             script.textContent = scriptContent;
             document.head.appendChild(script);
-            
-            // 设置注入标记
-            window.chromeDebugUploaderInjected = true;
         }, scriptContent);
         
         log('视频上传脚本注入成功！');
-        
-        // 等待脚本初始化完成
-        /**
-        await wait(config.delayBetweenActions);
-        
-        // 在页面中创建视频批量上传按钮
-        await page.evaluate(() => {
-            // 检查是否已存在按钮
-            if (document.getElementById('batch-upload-button')) {
-                return;
-            }
-            
-            const button = document.createElement('button');
-            button.id = 'batch-upload-button';
-            button.textContent = '批量上传视频';
-            button.style.position = 'fixed';
-            button.style.top = '100px';
-            button.style.right = '50px';
-            button.style.zIndex = '9999';
-            button.style.padding = '15px 30px';
-            button.style.backgroundColor = '#1aad19';
-            button.style.color = 'white';
-            button.style.border = 'none';
-            button.style.borderRadius = '6px';
-            button.style.cursor = 'pointer';
-            button.style.fontSize = '16px';
-            button.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-            
-            button.addEventListener('click', () => {
-                if (window.ChromeVideoUploader && window.ChromeVideoUploader.init) {
-                    console.log('点击了批量上传视频按钮，初始化上传器...');
-                    window.ChromeVideoUploader.init();
-                } else {
-                    console.log('视频上传器尚未初始化完成');
-                    alert('视频上传器尚未初始化完成，请稍后重试');
-                }
-            });
-            
-            document.body.appendChild(button);
-        });
-        
-        log('批量上传视频按钮已创建，请点击按钮开始上传');
-        */
         
     } catch (error) {
         log(`注入视频上传脚本失败: ${error.message}`);
@@ -406,59 +351,6 @@ const injectAndExecuteTagScript = async (page) => {
             log('警告：当前页面不适合注入用户标签脚本，跳过注入');
             return;
         }
-        
-        // 检查是否已经注入过脚本
-        const isAlreadyInjected = await page.evaluate(() => {
-            return window.chromeDebugTagInjected === true;
-        });
-        
-        if (isAlreadyInjected) {
-            log('用户标签脚本已经注入，跳过重复注入');
-            // 只检查按钮是否存在，不存在则创建
-            await page.evaluate(() => {
-                if (!document.getElementById('batch-tag-button')) {
-                    const button = document.createElement('button');
-                    button.id = 'batch-tag-button';
-                    button.textContent = '批量打标签';
-                    button.style.position = 'fixed';
-                    button.style.top = '100px';
-                    button.style.right = '50px';
-                    button.style.zIndex = '9999';
-                    button.style.padding = '15px 30px';
-                    button.style.backgroundColor = '#07c160';
-                    button.style.color = 'white';
-                    button.style.border = 'none';
-                    button.style.borderRadius = '6px';
-                    button.style.cursor = 'pointer';
-                    button.style.fontSize = '16px';
-                    button.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-                    
-                    button.addEventListener('click', () => {
-                        console.log('点击了批量打标签按钮');
-                        // 触发用户标签功能的初始化
-                        if (window.initUserTagTool) {
-                            window.initUserTagTool();
-                        } else {
-                            console.log('用户标签工具函数未找到');
-                            alert('用户标签工具尚未初始化完成，请稍后重试');
-                        }
-                    });
-                    
-                    document.body.appendChild(button);
-                    console.log('批量打标签按钮已重新创建');
-                }
-            });
-            return;
-        }
-        
-        // 清除旧的按钮
-        await page.evaluate(() => {
-            // 移除旧的标签按钮
-            const oldButton = document.getElementById('batch-tag-button');
-            if (oldButton) {
-                oldButton.remove();
-            }
-        });
         
         log('准备注入用户标签脚本...');
         
@@ -476,56 +368,9 @@ const injectAndExecuteTagScript = async (page) => {
             const script = document.createElement('script');
             script.textContent = scriptContent;
             document.head.appendChild(script);
-            
-            // 设置注入标记
-            window.chromeDebugTagInjected = true;
         }, scriptContent);
         
-        log('用户标签脚本注入成功！');
-        
-        // 等待脚本初始化完成
-        await wait(config.delayBetweenActions);
-        
-        // 在页面中创建用户批量打标签按钮
-        /**
-        await page.evaluate(() => {
-            // 检查是否已存在按钮
-            if (document.getElementById('batch-tag-button')) {
-                return;
-            }
-            
-            const button = document.createElement('button');
-            button.id = 'batch-tag-button';
-            button.textContent = '批量打标签';
-            button.style.position = 'fixed';
-            button.style.top = '100px';
-            button.style.right = '50px';
-            button.style.zIndex = '9999';
-            button.style.padding = '15px 30px';
-            button.style.backgroundColor = '#07c160';
-            button.style.color = 'white';
-            button.style.border = 'none';
-            button.style.borderRadius = '6px';
-            button.style.cursor = 'pointer';
-            button.style.fontSize = '16px';
-            button.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-            
-            button.addEventListener('click', () => {
-                console.log('点击了批量打标签按钮');
-                // 触发用户标签功能的初始化
-                if (window.initUserTagTool) {
-                    window.initUserTagTool();
-                } else {
-                    console.log('用户标签工具函数未找到');
-                    alert('用户标签工具尚未初始化完成，请稍后重试');
-                }
-            });
-            
-            document.body.appendChild(button);
-        });
-        */
-        
-        log('批量打标签按钮已创建，请点击按钮开始操作');
+        log('批量打标签按钮脚本已注入，请点击按钮开始操作');
         
     } catch (error) {
         log(`注入用户标签脚本失败: ${error.message}`);

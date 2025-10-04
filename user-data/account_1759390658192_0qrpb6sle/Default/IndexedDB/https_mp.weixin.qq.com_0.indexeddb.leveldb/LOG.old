@@ -1,17 +1,3 @@
-2025/10/02-22:37:56.138 13f0296 Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/10/02-22:37:56.138 13f0296 Recovering log #10
-2025/10/02-22:37:56.143 13f0296 Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/000010.log 
-2025/10/02-22:42:12.980 13f0296 Level-0 table #17: started
-2025/10/02-22:42:12.994 13f0296 Level-0 table #17: 2261269 bytes OK
-2025/10/02-22:42:12.997 13f0296 Delete type=0 #10
-2025/10/02-22:42:16.672 13f0294 Compacting 1@1 + 3@2 files
-2025/10/02-22:42:16.691 13f0294 Generated table #18@1: 5107 keys, 2130542 bytes
-2025/10/02-22:42:16.700 13f0294 Generated table #19@1: 11170 keys, 2128302 bytes
-2025/10/02-22:42:16.708 13f0294 Generated table #20@1: 156 keys, 2112525 bytes
-2025/10/02-22:42:16.712 13f0294 Generated table #21@1: 448 keys, 1304346 bytes
-2025/10/02-22:42:16.712 13f0294 Compacted 1@1 + 3@2 files => 7675715 bytes
-2025/10/02-22:42:16.714 13f0294 compacted to: files[ 0 0 4 0 0 0 0 ]
-2025/10/02-22:42:16.714 13f0294 Delete type=2 #14
-2025/10/02-22:42:16.714 13f0294 Delete type=2 #17
-2025/10/02-22:42:16.714 13f0294 Delete type=2 #13
-2025/10/02-22:42:16.714 13f0294 Delete type=2 #12
+2025/10/04-16:41:35.794 1536944 Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/10/04-16:41:35.797 1536944 Recovering log #48
+2025/10/04-16:41:35.811 1536944 Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/IndexedDB/https_mp.weixin.qq.com_0.indexeddb.leveldb/000048.log 

@@ -288,6 +288,11 @@ const checkAndProcessPage = async (page) => {
         log('检测到用户管理页，准备执行用户批量打标签功能...');
         await injectAndExecuteTagScript(page);
     }
+    // 检查是否为视频配置页面（新打开的配置页面）
+    else if (currentUrl.includes('cgi-bin/appmsg') && currentUrl.includes('t=media/appmsg_edit_v2') && currentUrl.includes('action=edit')) {
+        log('检测到视频配置页面，准备执行自动配置功能...');
+        await injectAndExecuteConfigAutoScript(page);
+    }
     // 检查是否为登录页
     else if (currentUrl.includes('mp.weixin.qq.com') && currentUrl.includes('cgi-bin/login')) {
         log('当前为登录页，请登录后继续');
@@ -303,7 +308,62 @@ const checkAndProcessPage = async (page) => {
             // 清除注入标记，以便在导航到目标页面时重新注入
             window.chromeDebugUploaderInjected = false;
             window.chromeDebugTagInjected = false;
+            window.chromeDebugConfigAutoInjected = false;
         });
+    }
+};
+
+// 注入并执行视频配置自动操作脚本
+const injectAndExecuteConfigAutoScript = async (page) => {
+    try {
+        // 检查当前页面是否适合注入脚本
+        const currentUrl = page.url();
+        if (!currentUrl.includes('cgi-bin/appmsg') || 
+            !currentUrl.includes('t=media/appmsg_edit_v2') || 
+            !currentUrl.includes('action=edit')) {
+            log('警告：当前页面不适合注入视频配置自动操作脚本，跳过注入');
+            return;
+        }
+        
+        // 检查是否已经注入过脚本
+        const isInjected = await page.evaluate(() => {
+            return window.chromeDebugConfigAutoInjected || false;
+        });
+        
+        if (isInjected) {
+            log('视频配置自动操作脚本在其他页面已经注入过');
+            //return;
+        }
+
+        log('准备注入视频配置自动操作脚本...');
+        
+        // 读取chrome-debug-config-auto.js文件内容
+        const scriptPath = path.join(__dirname, 'chrome-debug-config-auto.js');
+        if (!fs.existsSync(scriptPath)) {
+            throw new Error(`找不到视频配置自动操作脚本文件: ${scriptPath}`);
+        }
+        
+        const scriptContent = fs.readFileSync(scriptPath, 'utf8');
+        
+        // 注入脚本
+        await page.evaluate(scriptContent => {
+            // 将脚本内容注入到页面
+            const script = document.createElement('script');
+            script.textContent = scriptContent;
+            document.head.appendChild(script);
+            
+            // 设置注入标记
+            window.chromeDebugConfigAutoInjected = true;
+        }, scriptContent);
+        
+        log('视频配置自动操作脚本注入成功！');
+        log('脚本将自动执行以下操作：');
+        log('1. 点击留言配置按钮并确认');
+        log('2. 点击声明按钮，选择"内容来自AI"，点击确认');
+        log('3. 点击保存按钮完成配置');
+        
+    } catch (error) {
+        log(`注入视频配置自动操作脚本失败: ${error.message}`);
     }
 };
 

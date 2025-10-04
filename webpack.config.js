@@ -14,6 +14,7 @@ module.exports = {
     'wechat-mp-puppeteer-controller': './wechat-mp-puppeteer-controller.js',
     'account-manager': './account-manager.js',
     'chrome-debug-uploader': './chrome-debug-uploader.js',
+    'chrome-debug-config-auto': './chrome-debug-config-auto.js',
     'chrome-debug-tag': './chrome-debug-tag.js',
     'wechat-mp-auto-injector': './wechat-mp-auto-injector.js',
     'chrome-debug-video-batch-delete-pure': './chrome-debug-video-batch-delete-pure.js'

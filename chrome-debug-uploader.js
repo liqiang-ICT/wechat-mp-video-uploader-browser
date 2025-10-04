@@ -600,11 +600,11 @@ async function uploadSingleVideo(videoFile, coverFile = null) {
                         return false;
                     }
 
+                    /**
                     // 点击提交按钮（如果有）
                     appendDebugInfo('尝试点击提交按钮...');
                     const submitButtonSelectors = [
-                        '.video-setting__footer-btns-group .weui-desktop-btn_primary',
-                        '.weui-desktop-btn_primary'
+                        '.video-setting__footer-btns-group .weui-desktop-btn_primary'
                     ];
 
                     const submitButton = findElementWithMultipleSelectors(submitButtonSelectors, iframeDoc);
@@ -624,6 +624,29 @@ async function uploadSingleVideo(videoFile, coverFile = null) {
                         // 等待提交完成
                         appendDebugInfo('等待提交完成...');
                     }
+                    */
+                   // 点击“保存并发送”，进行发送配置
+                   appendDebugInfo('尝试点击“保存并发送”按钮...');
+                   const sendButtonSelectors = [
+                        '.video-setting__footer-btns-group .video-save-send-btn .weui-desktop-btn_default'
+                   ];
+
+                   const sendButton = findElementWithMultipleSelectors(sendButtonSelectors, iframeDoc);
+                   if (sendButton) {
+                        // 提交之前做页面跳转事件的捕捉，防止提交后页面跳转到其他页面，而是刷新当前页面，继续上传下一个视频
+                        window.addEventListener('beforeunload', (e) => {
+                            e.preventDefault();
+                        });
+
+                        tryClickElement(sendButton, '“保存并发送”按钮');
+                        while (sendButton.checkVisibility()) {
+                            await wait(1000);
+                            tryClickElement(sendButton, '“保存并发送”按钮');
+                            appendDebugInfo('“保存并发送”按钮尚不可点击');
+                        }
+
+                        appendDebugInfo('发送配置页面加载完成');
+                   }
 
                     appendDebugInfo(`视频 ${normalizedVideoFile.name} 上传完成！`);
                 } catch (error) {
@@ -776,7 +799,7 @@ async function batchUploadVideos(videoFiles) {
     appendDebugInfo(`成功: ${successCount} 个，失败: ${failCount} 个`);
     // 上传完成后，刷新视频列表页
     if (isVideoListPage()) {
-        appendDebugInfo('成功上传视频后，刷新页面...');
+        appendDebugInfo('成功上传视频后，请刷新页面查看...');
         location.reload();
     }
 }
@@ -941,19 +964,6 @@ function initChromeDebugUploader() {
     // 创建悬浮按钮容器
     const container = document.createElement('div');
     container.id = 'chrome-video-uploader-container';
-    /**
-    container.style.position = 'fixed';
-    container.style.top = '50px';
-    container.style.right = '50px';
-    container.style.zIndex = '9999';
-    container.style.textAlign = 'center';
-    container.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-    container.style.border = '1px solid #ddd';
-    container.style.borderRadius = '8px';
-    container.style.padding = '15px';
-    container.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-    container.style.maxWidth = '300px';
-    */
     container.style.display = 'inline';
 
     // 创建调试信息区域
@@ -1021,7 +1031,7 @@ function initChromeDebugUploader() {
     // container.appendChild(debugInfo);
 
     // 添加到目标元素后面
-    if (new Date().getTime() < new Date('2025-10-04').getTime()) {
+    if (new Date().getTime() < new Date('2025-11-04').getTime()) {
         const targetElement = document.querySelector('#app > div.weui-desktop-block > div.weui-desktop-block__main > div > div:nth-child(1) > div.weui-desktop-panel__hd.weui-desktop-global-mod > div.weui-desktop-global__extra > div.weui-desktop-btn_wrp');
         if (targetElement) {
             targetElement.parentNode.insertBefore(container, targetElement.nextSibling);

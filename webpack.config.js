@@ -69,9 +69,9 @@ module.exports = {
             join_vars: true,
             reduce_vars: true
           },
-          mangle: false, // 禁用变量名混淆，保留原始变量名
-          keep_classnames: true, // 保留类名
-          keep_fnames: true, // 保留函数名
+          mangle: true, // 开启变量名混淆，保留原始变量名
+          keep_classnames: false, // 不保留类名
+          keep_fnames: false, // 不保留函数名
           format: {
             comments: false, // 删除注释
             beautify: false // 不美化代码，保持最小体积

@@ -315,13 +315,16 @@ const checkAndProcessPage = async (page) => {
 
 // 注入并执行视频配置自动操作脚本
 const injectAndExecuteConfigAutoScript = async (page) => {
+    const pageInstanceId = `config-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    log(`准备注入视频配置自动脚本 - 页面ID: ${pageInstanceId}`);
+    
     try {
         // 检查当前页面是否适合注入脚本
         const currentUrl = page.url();
         if (!currentUrl.includes('cgi-bin/appmsg') || 
             !currentUrl.includes('t=media/appmsg_edit_v2') || 
             !currentUrl.includes('action=edit')) {
-            log('警告：当前页面不适合注入视频配置自动操作脚本，跳过注入');
+            log(`跳过注入 - 非视频配置页面: ${currentUrl}`);
             return;
         }
         
@@ -345,6 +348,11 @@ const injectAndExecuteConfigAutoScript = async (page) => {
         
         const scriptContent = fs.readFileSync(scriptPath, 'utf8');
         
+        // 注入页面实例ID
+        await page.evaluate((id) => {
+            window._configPageInstanceId = id;
+        }, pageInstanceId);
+        
         // 注入脚本
         await page.evaluate(scriptContent => {
             // 将脚本内容注入到页面
@@ -362,10 +370,69 @@ const injectAndExecuteConfigAutoScript = async (page) => {
         log('2. 点击声明按钮，选择"内容来自AI"，点击确认');
         log('3. 点击保存按钮完成配置');
         
+        // 监控配置完成状态并安全关闭页面
+        monitorConfigCompletionAndClose(page, pageInstanceId);
+        
     } catch (error) {
         log(`注入视频配置自动操作脚本失败: ${error.message}`);
+        // 输出更详细的错误堆栈
+        if (error.stack) {
+            console.error(error.stack);
+        }
     }
 };
+
+/**
+ * 监控配置完成状态并安全关闭页面
+ */
+async function monitorConfigCompletionAndClose(page, pageInstanceId) {
+    try {
+        // 设置最大等待时间为60秒
+        const maxWaitTime = 60000;
+        const checkInterval = 1000; // 每秒检查一次
+        let elapsedTime = 0;
+        
+        log(`开始监控配置完成状态 - 页面ID: ${pageInstanceId}`);
+        
+        // 轮询检查配置是否完成
+        while (elapsedTime < maxWaitTime) {
+            await new Promise(resolve => setTimeout(resolve, checkInterval));
+            elapsedTime += checkInterval;
+            
+            try {
+                // 检查配置是否完成
+                const isConfigCompleted = await page.evaluate(() => {
+                    return window._configAutoCompleted === true;
+                });
+                
+                if (isConfigCompleted) {
+                    log(`检测到配置已完成，等待2秒后安全关闭页面 - 页面ID: ${pageInstanceId}`);
+                    
+                    // 等待2秒确保所有保存操作完成
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // 使用Puppeteer的page.close()方法安全关闭页面
+                    // 设置waitUntil: 'networkidle0'确保网络活动完成
+                    await page.close({
+                        waitUntil: 'networkidle0',
+                        timeout: 10000
+                    });
+                    
+                    log(`页面已安全关闭 - 页面ID: ${pageInstanceId}`);
+                    return;
+                }
+            } catch (checkError) {
+                // 如果页面已经关闭或其他错误，直接返回
+                log(`监控过程中遇到错误，可能页面已关闭 - 页面ID: ${pageInstanceId}`);
+                return;
+            }
+        }
+        
+        log(`监控超时，页面未完成配置 - 页面ID: ${pageInstanceId}`);
+    } catch (error) {
+        log(`监控配置完成状态时出错: ${error.message}`);
+    }
+}
 
 // 注入并执行视频上传脚本
 const injectAndExecuteUploaderScript = async (page) => {

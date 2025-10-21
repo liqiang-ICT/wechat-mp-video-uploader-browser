@@ -1,7 +1,6 @@
-dist.zip
-error.log
+*.zip
+*.log
 accounts-data.json
-error.log
 dist/*
 node_modules/*
 user-data/*

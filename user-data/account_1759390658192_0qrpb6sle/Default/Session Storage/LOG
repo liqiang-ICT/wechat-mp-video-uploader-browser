@@ -1,3 +1,8 @@
-2025/10/20-09:53:29.359 3d515e Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Session Storage/MANIFEST-000001
-2025/10/20-09:53:29.360 3d515e Recovering log #13
-2025/10/20-09:53:29.361 3d515e Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Session Storage/000013.log 
+2025/10/29-20:40:03.451 7cf890 Reusing MANIFEST /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Session Storage/MANIFEST-000001
+2025/10/29-20:40:03.451 7cf890 Recovering log #13
+2025/10/29-20:40:03.452 7cf890 Level-0 table #16: started
+2025/10/29-20:40:03.454 7cf890 Level-0 table #16: 11186 bytes OK
+2025/10/29-20:40:03.454 7cf890 Recovering log #16
+2025/10/29-20:40:03.454 7cf890 Reusing old log /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/user-data/account_1759390658192_0qrpb6sle/Default/Session Storage/000016.log 
+2025/10/29-20:40:03.463 7cf890 Delete type=0 #13
+2025/10/29-20:40:03.463 7cf890 Delete type=2 #17

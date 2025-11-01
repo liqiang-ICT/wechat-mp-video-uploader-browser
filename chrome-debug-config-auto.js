@@ -430,15 +430,56 @@ async function clickArticleReplaceButton(type = '0') {
 async function handleContentDeclaration() {
     appendDebugInfo('正在处理内容声明...');
 
+    // 先点开内容声明面板
+    const contentDeclarationSelectors = [
+        '.allow_click_opr.js_claim_source_desc'
+    ];
+    const contentDeclaration = await waitForElement(contentDeclarationSelectors);
+    if (contentDeclaration) {
+        tryClickElement(contentDeclaration, '内容声明面板');
+        appendDebugInfo('已点击内容声明面板');
+    } else {
+        appendDebugInfo('未找到内容声明面板，无法点击');
+        const confirm = window.confirm('未找到内容声明面板，是否继续？');
+        if (!confirm) {
+            appendDebugInfo('用户选择不继续，跳过内容声明处理');
+            return;
+        }
+    }
+
     // 查找"内容来自AI"选项
     const aiContentSelectors = [
-        'input[data-label="内容由AI生成"]'
+        'input[type="radio"][class="weui-desktop-form__radio"][value="1"]'
     ];
 
     const aiContentOption = await waitForElement(aiContentSelectors);
     if (aiContentOption) {
         tryClickElement(aiContentOption, '内容来自AI选项');
         appendDebugInfo('内容声明已设置为"内容来自AI"');
+    } else {
+        appendDebugInfo('未找到"内容来自AI"选项，无法点击');
+        const confirm = window.confirm('未找到"内容来自AI"选项，是否继续？');
+        if (!confirm) {
+            appendDebugInfo('用户选择不继续，跳过内容声明处理');
+            return;
+        }
+    }
+
+    // 查找"确认"按钮
+    const confirmButtonSelectors = [
+        'div.claim-source-dialog .weui-desktop-btn_primary'
+    ];
+    const confirmButton = await waitForElement(confirmButtonSelectors);
+    if (confirmButton) {
+        tryClickElement(confirmButton, '内容声明确认按钮');
+        appendDebugInfo('已点击内容声明确认按钮');
+    } else {
+        appendDebugInfo('未找到内容声明确认按钮，无法点击');
+        const confirm = window.confirm('未找到内容声明确认按钮，是否继续？');
+        if (!confirm) {
+            appendDebugInfo('用户选择不继续，跳过内容声明处理');
+            return;
+        }
     }
 }
 

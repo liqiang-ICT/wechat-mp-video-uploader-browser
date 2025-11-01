@@ -155,12 +155,12 @@ const waitForLogin = async (page) => {
 // 为页面添加事件监听器
 const setupPageListeners = async (page) => {
     // 初始检查
-    await checkAndProcessPage(page);
+    // await checkAndProcessPage(page);
     
     // 监听页面导航事件
     page.on('framenavigated', async () => {
         log('检测到页面框架导航事件');
-        await checkAndProcessPage(page);
+        // await checkAndProcessPage(page);
     });
     
     // 监听页面加载完成事件
@@ -173,8 +173,8 @@ const setupPageListeners = async (page) => {
     page.on('domcontentloaded', async () => {
         log('检测到DOM内容加载完成事件');
         // 延迟一小段时间确保页面完全渲染
-        await wait(500);
-        await checkAndProcessPage(page);
+        // await wait(500);
+        // await checkAndProcessPage(page);
     });
     
     /*
@@ -237,11 +237,6 @@ const monitorPageUrl = async (page, browser) => {
                 log('检测到新标签页创建');
                 const newPage = await target.page();
                 if (newPage) {
-                    // 等待页面加载完成
-                    await newPage.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 5000 }).catch(() => {
-                        log('新标签页导航等待超时，继续执行');
-                    });
-                    
                     // 为新标签页添加监听器
                     log('为新标签页设置事件监听器');
                     await setupPageListeners(newPage);
@@ -250,7 +245,7 @@ const monitorPageUrl = async (page, browser) => {
         } catch (error) {
             log(`处理新标签页时出错: ${error.message}`);
         }
-    });
+    }); // */
     
     // 等待用户退出
     await new Promise(resolve => {
@@ -287,6 +282,11 @@ const checkAndProcessPage = async (page) => {
     else if (currentUrl.includes('cgi-bin/user_tag') && currentUrl.includes('action=get_all_data')) {
         log('检测到用户管理页，准备执行用户批量打标签功能...');
         await injectAndExecuteTagScript(page);
+    }
+    // 检查是否为草稿箱记录管理页
+    else if (currentUrl.includes('cgi-bin/appmsg') && currentUrl.includes('action=list_card')) {
+        log('检测到草稿箱记录管理页，准备执行草稿箱记录批量管理功能...');
+        await injectAndExecuteCardScript(page);
     }
     // 检查是否为视频配置页面（新打开的配置页面）
     else if (currentUrl.includes('cgi-bin/appmsg') && currentUrl.includes('t=media/appmsg_edit_v2') && currentUrl.includes('action=edit')) {
@@ -335,7 +335,7 @@ const injectAndExecuteConfigAutoScript = async (page) => {
         
         if (isInjected) {
             log('视频配置自动操作脚本在其他页面已经注入过');
-            //return;
+            return;
         }
 
         log('准备注入视频配置自动操作脚本...');
@@ -406,16 +406,16 @@ async function monitorConfigCompletionAndClose(page, pageInstanceId) {
                 });
                 
                 if (isConfigCompleted) {
-                    log(`检测到配置已完成，等待2秒后安全关闭页面 - 页面ID: ${pageInstanceId}`);
+                    log(`检测到配置已完成，关闭页面 - 页面ID: ${pageInstanceId}`);
                     
-                    // 等待2秒确保所有保存操作完成
-                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    // 等待10秒确保所有保存操作完成
+                    // await new Promise(resolve => setTimeout(resolve, 10000));
                     
                     // 使用Puppeteer的page.close()方法安全关闭页面
                     // 设置waitUntil: 'networkidle0'确保网络活动完成
                     await page.close({
                         waitUntil: 'networkidle0',
-                        timeout: 10000
+                        timeout: 2000
                     });
                     
                     log(`页面已安全关闭 - 页面ID: ${pageInstanceId}`);
@@ -424,6 +424,10 @@ async function monitorConfigCompletionAndClose(page, pageInstanceId) {
             } catch (checkError) {
                 // 如果页面已经关闭或其他错误，直接返回
                 log(`监控过程中遇到错误，可能页面已关闭 - 页面ID: ${pageInstanceId}`);
+                // 输出更详细的错误堆栈
+                if (checkError.stack) {
+                    log(checkError.stack);
+                }
                 return;
             }
         }
@@ -431,6 +435,10 @@ async function monitorConfigCompletionAndClose(page, pageInstanceId) {
         log(`监控超时，页面未完成配置 - 页面ID: ${pageInstanceId}`);
     } catch (error) {
         log(`监控配置完成状态时出错: ${error.message}`);
+        // 输出更详细的错误堆栈
+        if (error.stack) {
+            log(error.stack);
+        }
     }
 }
 
@@ -466,6 +474,41 @@ const injectAndExecuteUploaderScript = async (page) => {
         
     } catch (error) {
         log(`注入视频上传脚本失败: ${error.message}`);
+    }
+};
+
+// 注入并执行草稿箱记录批量管理脚本
+const injectAndExecuteCardScript = async (page) => {
+    try {
+        // 检查当前页面是否适合注入脚本
+        const currentUrl = page.url();
+        if (!currentUrl.includes('cgi-bin/appmsg') || !currentUrl.includes('action=list_card')) {
+            log('警告：当前页面不适合注入草稿箱记录批量管理脚本，跳过注入');
+            return;
+        }
+        
+        log('准备注入草稿箱记录批量管理脚本...');
+        
+        // 读取chrome-debug-card.js文件内容 
+        const scriptPath = path.join(__dirname, 'chrome-debug-card.js');
+        if (!fs.existsSync(scriptPath)) {
+            throw new Error(`找不到草稿箱记录批量管理脚本文件: ${scriptPath}`);
+        }
+        
+        const scriptContent = fs.readFileSync(scriptPath, 'utf8');
+        
+        // 注入脚本
+        await page.evaluate(scriptContent => {
+            // 将脚本内容注入到页面
+            const script = document.createElement('script');
+            script.textContent = scriptContent;
+            document.head.appendChild(script);
+        }, scriptContent);
+        
+        log('文章发表记录批量管理脚本注入成功！');
+        
+    } catch (error) {
+        log(`注入文章发表记录批量管理脚本失败: ${error.message}`);
     }
 };
 

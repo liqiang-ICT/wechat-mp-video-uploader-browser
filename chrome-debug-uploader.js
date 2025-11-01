@@ -325,6 +325,77 @@ async function clearUploadedVideos() {
     }
 }
 
+// 收集非原创文章的函数
+async function collectNonOriginalArticles() {
+    const articles = await fetchVideoHistoryRecords(500);
+    console.log('共发现文章数：', articles.length);
+    console.log('文章列表：', articles);
+    if (articles.length === 0) {
+        console.log('未发现文章');
+        return [];
+    }
+    const nonOriginalArticles = [];
+    for (const article of articles) {
+        const isNonOriginal = article.is_non_original === 1;
+        if (isNonOriginal) {
+            nonOriginalArticles.push({
+                app_id: article.app_id,
+                title: article.title
+            });
+        }
+    };
+    return nonOriginalArticles;
+}
+
+// 删除非原创视频的函数
+async function deleteNonOriginalVideos() {
+    // 按钮文字变为“收集非原创文章中”
+    const deleteNonOriginalButton = document.querySelector('#deleteNonOriginalButton');
+    if (deleteNonOriginalButton) {
+        deleteNonOriginalButton.disabled = true;
+        deleteNonOriginalButton.textContent = '收集非原创文章中...';
+    }
+    // 先收集所有非原创的文章清单，然后参考clearUploadedVideos的逻辑进行逐条删除
+    const nonOriginalArticles = await collectNonOriginalArticles();
+    if (nonOriginalArticles.length === 0) {
+        console.log('未发现非原创文章');
+        if (deleteNonOriginalButton) {
+            deleteNonOriginalButton.textContent = '删除非原创视频';
+            deleteNonOriginalButton.disabled = false;
+        }
+        return;
+    }
+
+    const confirmDelete = confirm(`确定要删除 ${nonOriginalArticles.length} 篇非原创文章吗？此操作不可恢复！`);
+    if (!confirmDelete) {
+        console.log('已取消删除操作');
+        if (deleteNonOriginalButton) {
+            deleteNonOriginalButton.textContent = '删除非原创视频';
+            deleteNonOriginalButton.disabled = false;
+        }
+        return;
+    }
+
+    let successCount = 0;
+    const currentUrl = window.location.href;
+    const token = getParamFromUrl(currentUrl, 'token');
+    for (const article of nonOriginalArticles) {
+        try {
+            await deleteSingleArticle(article.app_id, token, currentUrl);
+            successCount++;
+            // 更新进度
+            if (deleteNonOriginalButton) deleteNonOriginalButton.textContent = `删除非原创视频 (${successCount}/${nonOriginalArticles.length})`;
+        } catch (error) {
+            console.error(`删除失败: ${error.message}`);
+        }
+    }
+
+    // 刷新页面以显示最新状态
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+}
+
 // 删除单篇文章的函数，接收appMsgId、token和referer参数
 async function deleteSingleArticle(appMsgId, token, referer) {
     try {
@@ -365,7 +436,7 @@ async function uploadSingleVideo(videoFile, coverFile = null) {
         const normalizedVideoFile = createNormalizedFile(videoFile);
         // 规范化封面文件名（如果有）
         const normalizedCoverFile = coverFile ? createNormalizedFile(coverFile) : null;
-        
+
         appendDebugInfo(`开始上传视频: ${normalizedVideoFile.name}`);
         appendDebugInfo(`文件大小: ${(normalizedVideoFile.size / (1024 * 1024)).toFixed(2)} MB`);
 
@@ -625,14 +696,14 @@ async function uploadSingleVideo(videoFile, coverFile = null) {
                         appendDebugInfo('等待提交完成...');
                     }
                     */
-                   // 点击“保存并发送”，进行发送配置
-                   appendDebugInfo('尝试点击“保存并发送”按钮...');
-                   const sendButtonSelectors = [
+                    // 点击“保存并发送”，进行发送配置
+                    appendDebugInfo('尝试点击“保存并发送”按钮...');
+                    const sendButtonSelectors = [
                         '.video-setting__footer-btns-group .video-save-send-btn .weui-desktop-btn_default'
-                   ];
+                    ];
 
-                   const sendButton = findElementWithMultipleSelectors(sendButtonSelectors, iframeDoc);
-                   if (sendButton) {
+                    const sendButton = findElementWithMultipleSelectors(sendButtonSelectors, iframeDoc);
+                    if (sendButton) {
                         // 提交之前做页面跳转事件的捕捉，防止提交后页面跳转到其他页面，而是刷新当前页面，继续上传下一个视频
                         window.addEventListener('beforeunload', (e) => {
                             e.preventDefault();
@@ -646,7 +717,7 @@ async function uploadSingleVideo(videoFile, coverFile = null) {
                         }
 
                         appendDebugInfo('发送配置页面加载完成');
-                   }
+                    }
 
                     appendDebugInfo(`视频 ${normalizedVideoFile.name} 上传完成！`);
                 } catch (error) {
@@ -804,6 +875,422 @@ async function batchUploadVideos(videoFiles) {
     }
 }
 
+// 重复定义的isVideoListPage已移除（保留原始实现）
+
+/**
+ * 创建上传浮窗（使用iframe）
+ */
+// 重复的createUploadIframe已移除（保留后面的唯一版本）
+
+/** 
+ * 获取文件名的基础名称（不包含扩展名、特殊符号、数字、中文括号等） 
+ */
+// 重复的getBaseName已移除（保留前面的唯一版本）
+
+/**
+ * 初始化悬浮按钮
+ */
+function initChromeDebugUploader() {
+    // 检查是否在视频列表页
+    if (!isVideoListPage()) {
+        console.log('当前页面不是视频列表页，脚本将不会初始化');
+        showDebugInfo('请在微信公众号的视频列表页运行此脚本');
+        return;
+    }
+
+    // 检查是否已存在悬浮按钮
+    if (document.getElementById('chrome-video-uploader-container')) {
+        console.log('悬浮按钮已存在，无需重复创建');
+        return;
+    }
+
+    // 创建悬浮按钮容器
+    const container = document.createElement('div');
+    container.id = 'chrome-video-uploader-container';
+    container.style.display = 'inline';
+
+    // 创建调试信息区域
+    const debugInfo = document.createElement('div');
+    debugInfo.id = 'chrome-debug-info';
+    debugInfo.style.marginBottom = '10px';
+    debugInfo.style.padding = '10px';
+    debugInfo.style.backgroundColor = '#f5f5f5';
+    debugInfo.style.borderRadius = '4px';
+    debugInfo.style.minHeight = '60px';
+    debugInfo.style.fontSize = '12px';
+    debugInfo.style.textAlign = 'left';
+    debugInfo.style.whiteSpace = 'pre-wrap';
+    debugInfo.style.fontFamily = 'monospace';
+    debugInfo.textContent = '调试信息：等待选择视频文件或目录...';
+
+    // 创建选择视频文件按钮
+    const selectFileButton = document.createElement('button');
+    selectFileButton.id = 'chrome-select-files-btn';
+    selectFileButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
+    selectFileButton.style.backgroundColor = '#4CAF50';
+    selectFileButton.style.marginLeft = '10px';
+    selectFileButton.textContent = '上传多文件';
+
+    // 创建选择视频目录按钮
+    const selectDirButton = document.createElement('button');
+    selectDirButton.id = 'chrome-select-dir-btn';
+    selectDirButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
+    selectDirButton.style.backgroundColor = '#2196F3';
+    selectDirButton.style.marginLeft = '10px';
+    selectDirButton.textContent = '上传目录';
+
+    // 创建隐藏的文件输入框
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.id = 'chrome-file-selector';
+    fileInput.accept = 'video/*,image/png';
+    fileInput.multiple = true;
+    fileInput.style.display = 'none';
+
+    // 创建隐藏的目录选择输入框
+    const dirInput = document.createElement('input');
+    dirInput.type = 'file';
+    dirInput.id = 'chrome-dir-selector';
+    dirInput.webkitdirectory = true;
+    dirInput.style.display = 'none';
+
+    // 创建删除本页视频按钮
+    const deleteDirButton = document.createElement('button');
+    deleteDirButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
+    deleteDirButton.style.backgroundColor = '#2196F3';
+    deleteDirButton.style.marginLeft = '10px';
+    deleteDirButton.textContent = '删除本页';
+    // 添加ID属性，方便在clearUploadedVideos函数中选择
+    deleteDirButton.id = 'deleteDirButton';
+    deleteDirButton.setAttribute('data-action', 'delete-videos');
+
+    // 创建删除非原创视频按钮
+    const deleteNonOriginalButton = document.createElement('button');
+    deleteNonOriginalButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
+    deleteNonOriginalButton.style.backgroundColor = '#2196F3';
+    deleteNonOriginalButton.style.marginLeft = '10px';
+    deleteNonOriginalButton.textContent = '删除非原创';
+    deleteNonOriginalButton.id = 'deleteNonOriginalButton';
+    deleteNonOriginalButton.setAttribute('data-action', 'delete-non-original-videos');
+
+    // 组装元素
+    container.appendChild(selectFileButton);
+    container.appendChild(selectDirButton);
+    container.appendChild(fileInput);
+    container.appendChild(dirInput);
+    container.appendChild(deleteDirButton);
+    container.appendChild(deleteNonOriginalButton);
+    // container.appendChild(debugInfo);
+
+    // 添加到目标元素后面
+    if (new Date().getTime() < new Date('2025-12-04').getTime()) {
+        const targetElement = document.querySelector('#app > div.weui-desktop-block > div.weui-desktop-block__main > div > div:nth-child(1) > div.weui-desktop-panel__hd.weui-desktop-global-mod > div.weui-desktop-global__extra > div.weui-desktop-btn_wrp');
+        if (targetElement) {
+            targetElement.parentNode.insertBefore(container, targetElement.nextSibling);
+        } else {
+            console.error('目标元素未找到');
+            document.body.appendChild(container);
+        }
+    }
+
+    // 添加事件监听
+    selectFileButton.addEventListener('click', () => {
+        console.log('点击选择文件按钮');
+        showDebugInfo('按钮被点击，触发文件选择器...');
+        fileInput.click();
+    });
+
+    selectDirButton.addEventListener('click', () => {
+        console.log('点击选择目录按钮');
+        showDebugInfo('按钮被点击，触发目录选择器...');
+        dirInput.click();
+    });
+
+    fileInput.addEventListener('change', async () => {
+        console.log('文件选择发生变化');
+        const files = Array.from(fileInput.files);
+
+        if (files.length > 0) {
+            showDebugInfo(`已选择 ${files.length} 个文件\n`);
+
+            // 显示前3个文件的信息
+            files.slice(0, 3).forEach((file, index) => {
+                appendDebugInfo(`文件 ${index + 1}: ${file.name}`);
+                appendDebugInfo(`大小: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
+                appendDebugInfo(`类型: ${file.type || '未知'}`);
+            });
+
+            if (files.length > 3) {
+                appendDebugInfo(`... 还有 ${files.length - 3} 个文件`);
+            }
+
+            // 分离视频文件和PNG封面图片，并建立对应关系
+            let videoFiles = [];
+            const coverMap = new Map(); // 用于存储视频文件名到封面图片的映射
+
+            // 先收集所有PNG图片
+            files.forEach(file => {
+                if (file.name.toLowerCase().endsWith('.png')) {
+                    const normalizedFile = createNormalizedFile(file);
+                    const baseName = normalizedFile.name.replace(/\.png$/i, '');
+                    coverMap.set(baseName.toLowerCase(), normalizedFile);
+                    appendDebugInfo(`找到封面图片: ${normalizedFile.name}`);
+                }
+            });
+
+            // 然后收集视频文件并匹配封面
+            files.forEach(file => {
+                if (file.type.startsWith('video/')) {
+                    const normalizedFile = createNormalizedFile(file);
+                    const baseName = normalizedFile.name.replace(/\.[^/.]+$/, '');
+                    const matchingCover = coverMap.get(baseName.toLowerCase());
+
+                    if (matchingCover) {
+                        appendDebugInfo(`视频 ${normalizedFile.name} 匹配到封面图片: ${matchingCover.name}`);
+                        videoFiles.push({ video: normalizedFile, cover: matchingCover });
+                    } else {
+                        appendDebugInfo(`视频 ${normalizedFile.name} 没有找到匹配的封面图片`);
+                        videoFiles.push({ video: normalizedFile, cover: null });
+                    }
+                }
+            });
+
+            // 历史记录查重
+            const history = await ensureHistoryRecordsReady();
+            appendDebugInfo(`历史视频素材记录收集完成，共 ${history.length} 条`);
+            const titleSet = new Set(history.map(h => normalizeComparableTitle(h.title)));
+            const duplicates = [];
+            const filtered = [];
+            for (const item of videoFiles) {
+                const baseKey = normalizeComparableTitle(item.video.name);
+                if (titleSet.has(baseKey)) {
+                    const match = history.find(h => normalizeComparableTitle(h.title) === baseKey);
+                    duplicates.push({ file: item.video.name, title: (match && match.title) || '', time: (match && match.publish_time) || '' });
+                } else {
+                    filtered.push(item);
+                }
+            }
+            if (duplicates.length > 0) {
+                appendDebugInfo(`检测到历史重复 ${duplicates.length} 项`);
+                const sample = duplicates.slice(0, 10).map(d => `${d.file} ≈ ${d.title}`).join('\n');
+                const skip = confirm(`检测到 ${duplicates.length} 个可能重复的视频：\n${sample}\n选择“确定”跳过重复，或“取消”继续上传。`);
+                if (skip) {
+                    videoFiles = filtered;
+                    appendDebugInfo(`已跳过重复，剩余 ${videoFiles.length} 个待上传`);
+                } else {
+                    appendDebugInfo('用户选择继续上传包含重复的视频');
+                }
+            } else {
+                appendDebugInfo('未检测到历史重复视频');
+            }
+
+            if (videoFiles.length === 0) {
+                appendDebugInfo('未找到有效的视频文件');
+                alert('请选择有效的视频文件');
+                return;
+            }
+
+            appendDebugInfo(`\n筛选出 ${videoFiles.length} 个视频文件，准备上传`);
+
+            // 开始上传
+            await batchUploadVideos(videoFiles);
+        } else {
+            showDebugInfo('未选择任何文件');
+        }
+    });
+
+    dirInput.addEventListener('change', async () => {
+        console.log('目录选择发生变化');
+        const files = Array.from(dirInput.files);
+
+        if (files.length > 0) {
+            showDebugInfo(`已选择目录中的 ${files.length} 个文件\n`);
+
+            // 显示前3个文件的信息
+            files.slice(0, 3).forEach((file, index) => {
+                appendDebugInfo(`文件 ${index + 1}: ${file.name}`);
+                appendDebugInfo(`大小: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
+                appendDebugInfo(`类型: ${file.type || '未知'}`);
+            });
+
+            if (files.length > 3) {
+                appendDebugInfo(`... 还有 ${files.length - 3} 个文件`);
+            }
+
+            // 分离视频文件和PNG封面图片，并建立对应关系
+            let videoFiles = [];
+            const coverMap = new Map(); // 用于存储视频文件名到封面图片的映射
+
+            // 先收集所有PNG、JPG图片
+            files.forEach(file => {
+                if (file.name.toLowerCase().endsWith('.png') || file.name.toLowerCase().endsWith('.jpg')) {
+                    const normalizedFile = createNormalizedFile(file);
+                    const baseName = getBaseName(normalizedFile);
+                    coverMap.set(baseName.toLowerCase(), normalizedFile);
+                    appendDebugInfo(`找到封面图片: ${normalizedFile.name}`);
+                }
+            });
+
+            // 然后收集视频文件并匹配封面
+            files.forEach(file => {
+                if (file.type.startsWith('video/')) {
+                    const normalizedFile = createNormalizedFile(file);
+                    const baseName = getBaseName(normalizedFile);
+                    const matchingCover = coverMap.get(baseName.toLowerCase());
+
+                    if (matchingCover) {
+                        appendDebugInfo(`视频 ${normalizedFile.name} 匹配到封面图片: ${matchingCover.name}`);
+                        videoFiles.push({ video: normalizedFile, cover: matchingCover });
+                    } else {
+                        appendDebugInfo(`视频 ${normalizedFile.name} 没有找到匹配的封面图片`);
+                        videoFiles.push({ video: normalizedFile, cover: null });
+                    }
+                }
+            });
+
+            // 历史记录查重
+            const history = await ensureHistoryRecordsReady();
+            appendDebugInfo(`历史视频素材记录收集完成，共 ${history.length} 条`);
+            const titleSet = new Set(history.map(h => h.title));
+            appendDebugInfo('标题集：' + Array.from(titleSet).join(', '));
+            const duplicates = [];
+            const filtered = [];
+            for (const item of videoFiles) {
+                const baseKey = normalizeComparableTitle(item.video.name);
+                appendDebugInfo(`根据视频标题 ${baseKey} 检查视频 ${item.video.name} 是否重复...`);
+                if (titleSet.has(baseKey)) {
+                    const match = history.find(h => h.title === baseKey);
+                    duplicates.push({ file: item.video.name, title: (match && match.title) || '', time: (match && match.publish_time) || '' });
+                } else {
+                    filtered.push(item);
+                }
+            }
+            if (duplicates.length > 0) {
+                appendDebugInfo(`检测到历史重复 ${duplicates.length} 项`);
+                const sample = duplicates.slice(0, 10).map(d => `${d.file} ≈ ${d.title}`).join('\n');
+                const skip = confirm(`检测到 ${duplicates.length} 个可能重复的视频：\n${sample}\n选择“确定”跳过重复，或“取消”继续上传。`);
+                if (skip) {
+                    videoFiles = filtered;
+                    appendDebugInfo(`已跳过重复，剩余 ${videoFiles.length} 个待上传`);
+                } else {
+                    appendDebugInfo('用户选择继续上传包含重复的视频');
+                }
+            } else {
+                appendDebugInfo('未检测到历史重复视频');
+            }
+
+            if (videoFiles.length === 0) {
+                appendDebugInfo('所选目录中未找到有效的视频文件');
+                alert('所选目录中未找到有效的视频文件');
+                return;
+            }
+
+            appendDebugInfo(`\n筛选出 ${videoFiles.length} 个视频文件，准备上传`);
+
+            // 开始上传
+            await batchUploadVideos(videoFiles);
+        } else {
+            showDebugInfo('未选择任何目录或文件');
+        }
+    });
+
+    deleteDirButton.addEventListener('click', () => {
+        console.log('点击删除本页视频按钮');
+        showDebugInfo('按钮被点击，删除本页视频...');
+        // 清空上传的视频列表
+        clearUploadedVideos();
+    });
+
+    deleteNonOriginalButton.addEventListener('click', () => {
+        console.log('点击删除非原创视频按钮');
+        showDebugInfo('按钮被点击，删除非原创视频...');
+        // 调用删除非原创视频的函数
+        deleteNonOriginalVideos();
+    });
+
+    console.log('Chrome调试工具视频上传悬浮按钮已成功创建');
+    showDebugInfo('悬浮按钮已创建完成，请点击"选择视频文件"按钮开始上传');
+}
+
+// 当页面加载完成后初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initChromeDebugUploader);
+} else {
+    // 页面已经加载完成，直接初始化
+    initChromeDebugUploader();
+}
+
+// 导出主要函数，方便在控制台手动调用
+window.ChromeVideoUploader = {
+    init: initChromeDebugUploader,
+    uploadVideo: uploadSingleVideo,
+    batchUploadVideos: batchUploadVideos,
+    showDebugInfo: showDebugInfo,
+    appendDebugInfo: appendDebugInfo,
+    normalizeFileName: normalizeFileName,
+    createNormalizedFile: createNormalizedFile
+};
+
+// 提取当前页面token
+function getCurrentToken() {
+    return getParamFromUrl(window.location.href, 'token') || null;
+}
+
+// 将标题规范化为可比较的键（与getBaseName一致策略：仅保留中文，去括号）
+function normalizeComparableTitle(text) {
+    if (!text) return '';
+    let s = text.trim();
+    s = s.replace(/\.[^\/.]+$/, '');
+    return s.toLowerCase();
+}
+
+// 抓取历史视频素材发表记录（最多maxCount条）
+async function fetchVideoHistoryRecords(maxCount = 200) {
+    const token = getCurrentToken();
+    if (!token) { appendDebugInfo('无法获取token，历史记录抓取跳过'); return []; }
+    const pageSize = 50;
+    const records = [];
+    for (let begin = 0; begin < maxCount; begin += pageSize) {
+        const url = `https://mp.weixin.qq.com/cgi-bin/appmsg?action=list_video&t=media/video_list&type=15&begin=${begin}&count=${pageSize}&token=${token}&lang=zh_CN&f=json&ajax=1`;
+        try {
+            const resp = await fetch(url, { credentials: 'include' });
+            const data = await resp.json();
+            const items = data && data.app_msg_info && Array.isArray(data.app_msg_info.item) ? data.app_msg_info.item : null;
+            if (!items || items.length === 0) break;
+            appendDebugInfo(`抓取历史记录第 ${begin} 条开始，共 ${items.length} 条`);
+            for (const it of items) {
+                const title = (it.title || it.appmsg_title || '').trim();
+                const publish_time = it.create_time || it.update_time || it.time || null;
+                const is_non_original = it.multi_item && Array.isArray(it.multi_item) && it.multi_item.length > 0 ? it.multi_item[0].video_ori_status === 2 ? 1 : 0 : 0;
+                const app_id = it.app_id || '';
+                records.push({ title, publish_time, is_non_original, app_id });
+            }
+            if (records.length >= maxCount) {
+                appendDebugInfo(`已抓取到 ${maxCount} 条历史记录，停止抓取`);
+                break;
+            }
+        } catch (e) {
+            appendDebugInfo(`抓取历史记录失败: ${e.message}`);
+            break;
+        }
+    }
+    window.__wxVideoHistoryRecords = records;
+    try { localStorage.setItem('wxVideoHistoryRecords', JSON.stringify({ ts: Date.now(), records })); } catch { }
+    appendDebugInfo(`历史视频素材记录收集完成，共 ${records.length} 条`);
+    return records;
+}
+
+async function ensureHistoryRecordsReady() {
+    const confirm = window.confirm('是否抓取历史视频素材发表记录？（最多200条）');
+    if (!confirm) {
+        appendDebugInfo('用户选择不抓取历史记录，跳过');
+        return [];
+    }
+    return await fetchVideoHistoryRecords(200);
+}
+
+// 重复定义的batchUploadVideos已移除（保留原始实现）
+
 /**
  * 检查是否在视频列表页
  */
@@ -947,291 +1434,6 @@ function getBaseName(file) {
 /**
  * 初始化悬浮按钮
  */
-function initChromeDebugUploader() {
-    // 检查是否在视频列表页
-    if (!isVideoListPage()) {
-        console.log('当前页面不是视频列表页，脚本将不会初始化');
-        showDebugInfo('请在微信公众号的视频列表页运行此脚本');
-        return;
-    }
+// 重复的初始化函数已移除（保留前面的唯一版本）
 
-    // 检查是否已存在悬浮按钮
-    if (document.getElementById('chrome-video-uploader-container')) {
-        console.log('悬浮按钮已存在，无需重复创建');
-        return;
-    }
-
-    // 创建悬浮按钮容器
-    const container = document.createElement('div');
-    container.id = 'chrome-video-uploader-container';
-    container.style.display = 'inline';
-
-    // 创建调试信息区域
-    const debugInfo = document.createElement('div');
-    debugInfo.id = 'chrome-debug-info';
-    debugInfo.style.marginBottom = '10px';
-    debugInfo.style.padding = '10px';
-    debugInfo.style.backgroundColor = '#f5f5f5';
-    debugInfo.style.borderRadius = '4px';
-    debugInfo.style.minHeight = '60px';
-    debugInfo.style.fontSize = '12px';
-    debugInfo.style.textAlign = 'left';
-    debugInfo.style.whiteSpace = 'pre-wrap';
-    debugInfo.style.fontFamily = 'monospace';
-    debugInfo.textContent = '调试信息：等待选择视频文件或目录...';
-
-    // 创建选择视频文件按钮
-    const selectFileButton = document.createElement('button');
-    selectFileButton.id = 'chrome-select-files-btn';
-    selectFileButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
-    selectFileButton.style.backgroundColor = '#4CAF50';
-    selectFileButton.style.marginLeft = '10px';
-    selectFileButton.textContent = '选择视频文件';
-
-    // 创建选择视频目录按钮
-    const selectDirButton = document.createElement('button');
-    selectDirButton.id = 'chrome-select-dir-btn';
-    selectDirButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
-    selectDirButton.style.backgroundColor = '#2196F3';
-    selectDirButton.style.marginLeft = '10px';
-    selectDirButton.textContent = '选择视频目录';
-
-    // 创建隐藏的文件输入框
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.id = 'chrome-file-selector';
-    fileInput.accept = 'video/*,image/png';
-    fileInput.multiple = true;
-    fileInput.style.display = 'none';
-
-    // 创建隐藏的目录选择输入框
-    const dirInput = document.createElement('input');
-    dirInput.type = 'file';
-    dirInput.id = 'chrome-dir-selector';
-    dirInput.webkitdirectory = true;
-    dirInput.style.display = 'none';
-
-    // 创建删除本页视频按钮
-    const deleteDirButton = document.createElement('button');
-    deleteDirButton.id = 'chrome-delete-dir-btn';
-    deleteDirButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
-    deleteDirButton.style.backgroundColor = '#2196F3';
-    deleteDirButton.style.marginLeft = '10px';
-    deleteDirButton.textContent = '删除本页视频';
-    // 添加ID属性，方便在clearUploadedVideos函数中选择
-    deleteDirButton.id = 'deleteDirButton';
-    deleteDirButton.setAttribute('data-action', 'delete-videos');
-
-    // 组装元素
-    container.appendChild(selectFileButton);
-    container.appendChild(selectDirButton);
-    container.appendChild(fileInput);
-    container.appendChild(dirInput);
-    container.appendChild(deleteDirButton);
-    // container.appendChild(debugInfo);
-
-    // 添加到目标元素后面
-    if (new Date().getTime() < new Date('2025-11-04').getTime()) {
-        const targetElement = document.querySelector('#app > div.weui-desktop-block > div.weui-desktop-block__main > div > div:nth-child(1) > div.weui-desktop-panel__hd.weui-desktop-global-mod > div.weui-desktop-global__extra > div.weui-desktop-btn_wrp');
-        if (targetElement) {
-            targetElement.parentNode.insertBefore(container, targetElement.nextSibling);
-        } else {
-            console.error('目标元素未找到');
-            document.body.appendChild(container);
-        }
-    }
-
-    // 添加事件监听
-    selectFileButton.addEventListener('click', () => {
-        console.log('点击选择文件按钮');
-        showDebugInfo('按钮被点击，触发文件选择器...');
-        fileInput.click();
-    });
-
-    selectDirButton.addEventListener('click', () => {
-        console.log('点击选择目录按钮');
-        showDebugInfo('按钮被点击，触发目录选择器...');
-        dirInput.click();
-    });
-
-    fileInput.addEventListener('change', async () => {
-        console.log('文件选择发生变化');
-        const files = Array.from(fileInput.files);
-
-        if (files.length > 0) {
-            showDebugInfo(`已选择 ${files.length} 个文件\n`);
-
-            // 显示前3个文件的信息
-            files.slice(0, 3).forEach((file, index) => {
-                appendDebugInfo(`文件 ${index + 1}: ${file.name}`);
-                appendDebugInfo(`大小: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
-                appendDebugInfo(`类型: ${file.type || '未知'}`);
-            });
-
-            if (files.length > 3) {
-                appendDebugInfo(`... 还有 ${files.length - 3} 个文件`);
-            }
-
-            // 分离视频文件和PNG封面图片，并建立对应关系
-            const videoFiles = [];
-            const coverMap = new Map(); // 用于存储视频文件名到封面图片的映射
-
-            // 先收集所有PNG图片
-            files.forEach(file => {
-                if (file.name.toLowerCase().endsWith('.png')) {
-                    // 规范化文件名
-                    const normalizedFile = createNormalizedFile(file);
-                    // 提取不带扩展名的文件名作为键
-                    const baseName = normalizedFile.name.replace(/\.png$/i, '');
-                    coverMap.set(baseName.toLowerCase(), normalizedFile);
-                    appendDebugInfo(`找到封面图片: ${normalizedFile.name}`);
-                }
-            });
-
-            // 然后收集视频文件并匹配封面
-            files.forEach(file => {
-                if (file.type.startsWith('video/')) {
-                    // 规范化文件名
-                    const normalizedFile = createNormalizedFile(file);
-                    // 提取不带扩展名的文件名用于匹配封面
-                    const baseName = normalizedFile.name.replace(/\.[^/.]+$/, '');
-                    const matchingCover = coverMap.get(baseName.toLowerCase());
-
-                    if (matchingCover) {
-                        appendDebugInfo(`视频 ${normalizedFile.name} 匹配到封面图片: ${matchingCover.name}`);
-                        // 将视频和封面一起存储
-                        videoFiles.push({
-                            video: normalizedFile,
-                            cover: matchingCover
-                        });
-                    } else {
-                        appendDebugInfo(`视频 ${normalizedFile.name} 没有找到匹配的封面图片`);
-                        // 只有视频，没有封面
-                        videoFiles.push({
-                            video: normalizedFile,
-                            cover: null
-                        });
-                    }
-                }
-            });
-
-            if (videoFiles.length === 0) {
-                appendDebugInfo('未找到有效的视频文件');
-                alert('请选择有效的视频文件');
-                return;
-            }
-
-            appendDebugInfo(`\n筛选出 ${videoFiles.length} 个视频文件，准备上传`);
-
-            // 开始上传
-            await batchUploadVideos(videoFiles);
-        } else {
-            showDebugInfo('未选择任何文件');
-        }
-    });
-
-    dirInput.addEventListener('change', async () => {
-        console.log('目录选择发生变化');
-        const files = Array.from(dirInput.files);
-
-        if (files.length > 0) {
-            showDebugInfo(`已选择目录中的 ${files.length} 个文件\n`);
-
-            // 显示前3个文件的信息
-            files.slice(0, 3).forEach((file, index) => {
-                appendDebugInfo(`文件 ${index + 1}: ${file.name}`);
-                appendDebugInfo(`大小: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
-                appendDebugInfo(`类型: ${file.type || '未知'}`);
-            });
-
-            if (files.length > 3) {
-                appendDebugInfo(`... 还有 ${files.length - 3} 个文件`);
-            }
-
-            // 分离视频文件和PNG封面图片，并建立对应关系
-            const videoFiles = [];
-            const coverMap = new Map(); // 用于存储视频文件名到封面图片的映射
-
-            // 先收集所有PNG、JPG图片
-            files.forEach(file => {
-                if (file.name.toLowerCase().endsWith('.png') || file.name.toLowerCase().endsWith('.jpg')) {
-                    // 规范化文件名
-                    const normalizedFile = createNormalizedFile(file);
-                    // 提取不带扩展名的文件名作为键
-                    const baseName = getBaseName(normalizedFile);
-                    coverMap.set(baseName.toLowerCase(), normalizedFile);
-                    appendDebugInfo(`找到封面图片: ${normalizedFile.name}`);
-                }
-            });
-
-            // 然后收集视频文件并匹配封面
-            files.forEach(file => {
-                if (file.type.startsWith('video/')) {
-                    // 规范化文件名
-                    const normalizedFile = createNormalizedFile(file);
-                    // 提取不带扩展名的文件名用于匹配封面
-                    const baseName = getBaseName(normalizedFile);
-                    const matchingCover = coverMap.get(baseName.toLowerCase());
-
-                    if (matchingCover) {
-                        appendDebugInfo(`视频 ${normalizedFile.name} 匹配到封面图片: ${matchingCover.name}`);
-                        // 将视频和封面一起存储
-                        videoFiles.push({
-                            video: normalizedFile,
-                            cover: matchingCover
-                        });
-                    } else {
-                        appendDebugInfo(`视频 ${normalizedFile.name} 没有找到匹配的封面图片`);
-                        // 只有视频，没有封面
-                        videoFiles.push({
-                            video: normalizedFile,
-                            cover: null
-                        });
-                    }
-                }
-            });
-
-            if (videoFiles.length === 0) {
-                appendDebugInfo('所选目录中未找到有效的视频文件');
-                alert('所选目录中未找到有效的视频文件');
-                return;
-            }
-
-            appendDebugInfo(`\n筛选出 ${videoFiles.length} 个视频文件，准备上传`);
-
-            // 开始上传
-            await batchUploadVideos(videoFiles);
-        } else {
-            showDebugInfo('未选择任何目录或文件');
-        }
-    });
-
-    deleteDirButton.addEventListener('click', () => {
-        console.log('点击删除本页视频按钮');
-        showDebugInfo('按钮被点击，删除本页视频...');
-        // 清空上传的视频列表
-        clearUploadedVideos();
-    });
-
-    console.log('Chrome调试工具视频上传悬浮按钮已成功创建');
-    showDebugInfo('悬浮按钮已创建完成，请点击"选择视频文件"按钮开始上传');
-}
-
-// 当页面加载完成后初始化
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initChromeDebugUploader);
-} else {
-    // 页面已经加载完成，直接初始化
-    initChromeDebugUploader();
-}
-
-// 导出主要函数，方便在控制台手动调用
-window.ChromeVideoUploader = {
-    init: initChromeDebugUploader,
-    uploadVideo: uploadSingleVideo,
-    batchUploadVideos: batchUploadVideos,
-    showDebugInfo: showDebugInfo,
-    appendDebugInfo: appendDebugInfo,
-    normalizeFileName: normalizeFileName,
-    createNormalizedFile: createNormalizedFile
-};
+// 重复的初始化与导出已移除（保留前面的唯一版本）

@@ -263,6 +263,133 @@ const monitorPageUrl = async (page, browser) => {
     });
 };
 
+// 处理待更新的文件
+async function processPendingUpdates() {
+    try {
+        // 检查是否有待更新信息文件
+        const updateInfoPath = path.join(__dirname, 'pending-updates.json');
+        if (!fs.existsSync(updateInfoPath)) {
+            log('没有找到待更新信息文件，跳过更新检查');
+            return;
+        }
+        
+        // 读取更新信息文件
+        log('正在读取更新信息文件...');
+        const updateInfoJson = fs.readFileSync(updateInfoPath, 'utf8');
+        
+        let updateInfo;
+        try {
+            // 解析更新信息
+            updateInfo = JSON.parse(updateInfoJson);
+            log(`发现待处理更新: 版本 ${updateInfo.version}，共 ${updateInfo.files?.length || 0} 个文件`);
+        } catch (parseError) {
+            log(`解析更新信息失败: ${parseError.message}`);
+            return;
+        }
+        
+        if (!updateInfo.files || !Array.isArray(updateInfo.files) || updateInfo.files.length === 0) {
+            log('没有需要更新的文件');
+            return;
+        }
+        
+        // 创建更新日志
+        log(`开始处理系统更新，版本: ${updateInfo.version}`);
+        log(`准备更新 ${updateInfo.files.length} 个文件...`);
+        
+        // 处理每个文件
+        let successCount = 0;
+        let failedCount = 0;
+        
+        for (const file of updateInfo.files) {
+            try {
+                if (!file.path || !file.url) {
+                    log(`跳过无效文件项: ${JSON.stringify(file)}`);
+                    failedCount++;
+                    continue;
+                }
+                
+                // 构建目标文件路径
+                const targetFilePath = path.join(__dirname, file.path);
+                
+                // 确保目标目录存在
+                const targetDir = path.dirname(targetFilePath);
+                if (!fs.existsSync(targetDir)) {
+                    log(`创建目标目录: ${targetDir}`);
+                    fs.mkdirSync(targetDir, { recursive: true });
+                }
+                
+                // 下载文件
+                log(`正在下载: ${file.path} -> ${targetFilePath}`);
+                
+                // 使用axios或原生http/https模块下载文件
+                // 这里使用简化的实现，实际应用中应该使用更健壮的下载方法
+                const https = require('https');
+                
+                await new Promise((resolve, reject) => {
+                    const fileStream = fs.createWriteStream(targetFilePath);
+                    
+                    https.get(file.url, (response) => {
+                        if (response.statusCode !== 200) {
+                            reject(new Error(`下载失败: ${response.statusCode}`));
+                            return;
+                        }
+                        
+                        response.pipe(fileStream);
+                        
+                        fileStream.on('finish', () => {
+                            fileStream.close();
+                            resolve();
+                        });
+                    }).on('error', (error) => {
+                        fs.unlinkSync(targetFilePath); // 删除不完整的文件
+                        reject(error);
+                    });
+                });
+                
+                log(`成功更新: ${file.path}`);
+                successCount++;
+                
+            } catch (fileError) {
+                log(`更新文件 ${file.path} 失败: ${fileError.message}`);
+                failedCount++;
+            }
+        }
+        
+        // 输出更新结果摘要
+        log(`更新完成 - 成功: ${successCount}, 失败: ${failedCount}`);
+        
+        // 如果全部成功，记录更新成功信息
+        if (failedCount === 0) {
+            const updateLog = {
+                version: updateInfo.version,
+                timestamp: new Date().toISOString(),
+                filesUpdated: successCount,
+                status: 'success'
+            };
+            
+            // 保存更新日志
+            const updateLogPath = path.join(__dirname, 'update-history.json');
+            fs.writeFileSync(updateLogPath, JSON.stringify(updateLog, null, 2), 'utf8');
+            log(`更新日志已保存到: ${updateLogPath}`);
+        }
+        
+    } catch (error) {
+        log(`处理待更新文件时出错: ${error.message}`);
+        console.error('更新处理错误详情:', error);
+    } finally {
+        // 清理更新信息临时文件
+        try {
+            const updateInfoPath = path.join(__dirname, 'pending-updates.json');
+            if (fs.existsSync(updateInfoPath)) {
+                fs.unlinkSync(updateInfoPath);
+                log('更新信息临时文件已删除');
+            }
+        } catch (cleanupError) {
+            log(`清理更新信息文件时出错: ${cleanupError.message}`);
+        }
+    }
+};
+
 // 检查页面URL并执行相应操作
 const checkAndProcessPage = async (page) => {
     const currentUrl = page.url();
@@ -782,6 +909,35 @@ const startAccountManager = async () => {
                 // 返回空数组避免前端出错
                 return [];
             }
+        });
+        
+        // 注入notifyBackendForUpdates函数，用于通知后端处理更新
+        await page.exposeFunction('notifyBackendForUpdates', async () => {
+            log('接收到前端更新通知信号');
+            // 延迟执行，确保页面有足够时间保存数据
+            setTimeout(() => {
+                processPendingUpdates();
+            }, 500);
+        });
+        
+        // 注入writeUpdateInfoToTempFile函数，用于将更新信息写入临时文件
+        await page.exposeFunction('writeUpdateInfoToTempFile', async (updateInfoJson) => {
+            try {
+                const updateInfoPath = path.join(__dirname, 'pending-updates.json');
+                fs.writeFileSync(updateInfoPath, updateInfoJson, 'utf8');
+                log(`更新信息已保存到临时文件: ${updateInfoPath}`);
+                return true;
+            } catch (error) {
+                log(`保存更新信息失败: ${error.message}`);
+                return false;
+            }
+        });
+        
+        // 监听账号管理页面的关闭事件
+        page.on('close', async () => {
+            log('账号管理页面已关闭，检查是否有待处理的更新...');
+            // 检查是否有待处理的更新
+            await processPendingUpdates();
         });
         
         // 打开账号管理页面

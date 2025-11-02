@@ -16194,3 +16194,251 @@
 [2025-11-01T16:52:40.751Z] 普惠老年 的浏览器已关闭
 [2025-11-01T16:52:43.590Z] 浏览器已关闭
 [2025-11-01T16:52:44.956Z] 程序退出中...
+[2025-11-02T10:56:29.807Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T10:56:29.808Z] 启动账号管理页面...
+[2025-11-02T10:56:31.981Z] 前端请求获取最新账号数据
+[2025-11-02T10:56:31.982Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T10:56:32.130Z] 前端请求获取最新账号数据
+[2025-11-02T10:56:32.130Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:11:09.342Z] 前端请求获取最新账号数据
+[2025-11-02T11:11:09.344Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:11:32.551Z] 浏览器已关闭
+[2025-11-02T11:11:37.424Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:11:37.424Z] 启动账号管理页面...
+[2025-11-02T11:11:39.488Z] 前端请求获取最新账号数据
+[2025-11-02T11:11:39.488Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:11:39.629Z] 前端请求获取最新账号数据
+[2025-11-02T11:11:39.629Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:12:43.751Z] 浏览器已关闭
+[2025-11-02T11:13:54.639Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:13:54.639Z] 启动账号管理页面...
+[2025-11-02T11:13:56.671Z] 前端请求获取最新账号数据
+[2025-11-02T11:13:56.672Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:13:56.781Z] 前端请求获取最新账号数据
+[2025-11-02T11:13:56.781Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:27:18.352Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:27:18.352Z] 启动账号管理页面...
+[2025-11-02T11:27:20.426Z] 前端请求获取最新账号数据
+[2025-11-02T11:27:20.426Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:27:20.535Z] 前端请求获取最新账号数据
+[2025-11-02T11:27:20.535Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:27:30.172Z] 前端请求获取最新账号数据
+[2025-11-02T11:27:30.172Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:27:59.052Z] 微信公众号自动控制器启动 - 切换到账号: account_1761914912256_bn5ulfspb
+[2025-11-02T11:27:59.054Z] 加载账号: 普惠老年 (Teach-fans)
+[2025-11-02T11:27:59.054Z] 尝试执行启动浏览器 (第1/3次尝试)
+[2025-11-02T11:27:59.551Z] 启动浏览器执行成功
+[2025-11-02T11:28:07.389Z] 账号 普惠老年 登录成功，开始监测页面URL变化...
+[2025-11-02T11:28:07.389Z] 尝试执行创建操作面板 (第1/3次尝试)
+[2025-11-02T11:28:07.435Z] 创建操作面板执行成功
+[2025-11-02T11:28:07.436Z] 开始监测页面URL变化和新标签页创建...
+[2025-11-02T11:28:07.437Z] 按Enter键退出程序...
+[2025-11-02T11:29:44.177Z] 前端请求获取最新账号数据
+[2025-11-02T11:29:44.178Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:30:52.417Z] 前端请求获取最新账号数据
+[2025-11-02T11:30:52.418Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:31:02.899Z] 前端请求获取最新账号数据
+[2025-11-02T11:31:02.900Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:31:05.345Z] 浏览器已关闭
+[2025-11-02T11:31:06.869Z] 程序退出中...
+[2025-11-02T11:31:08.106Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:31:08.106Z] 启动账号管理页面...
+[2025-11-02T11:31:10.164Z] 前端请求获取最新账号数据
+[2025-11-02T11:31:10.165Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:31:10.275Z] 前端请求获取最新账号数据
+[2025-11-02T11:31:10.275Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:33:02.310Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:33:02.311Z] 启动账号管理页面...
+[2025-11-02T11:33:04.349Z] 前端请求获取最新账号数据
+[2025-11-02T11:33:04.349Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:33:04.474Z] 前端请求获取最新账号数据
+[2025-11-02T11:33:04.475Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:33:38.474Z] 浏览器已关闭
+[2025-11-02T11:35:04.833Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:35:04.833Z] 启动账号管理页面...
+[2025-11-02T11:35:06.888Z] 前端请求获取最新账号数据
+[2025-11-02T11:35:06.889Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:35:06.999Z] 前端请求获取最新账号数据
+[2025-11-02T11:35:06.999Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:38:37.381Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:38:37.382Z] 启动账号管理页面...
+[2025-11-02T11:38:39.452Z] 前端请求获取最新账号数据
+[2025-11-02T11:38:39.452Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:38:39.593Z] 前端请求获取最新账号数据
+[2025-11-02T11:38:39.593Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:43:03.435Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:43:03.435Z] 启动账号管理页面...
+[2025-11-02T11:43:05.484Z] 前端请求获取最新账号数据
+[2025-11-02T11:43:05.484Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:43:05.622Z] 前端请求获取最新账号数据
+[2025-11-02T11:43:05.622Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:45:34.426Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:45:34.427Z] 启动账号管理页面...
+[2025-11-02T11:45:36.512Z] 前端请求获取最新账号数据
+[2025-11-02T11:45:36.512Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:45:36.653Z] 前端请求获取最新账号数据
+[2025-11-02T11:45:36.653Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:45:59.873Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:45:59.873Z] 启动账号管理页面...
+[2025-11-02T11:46:01.792Z] 前端请求获取最新账号数据
+[2025-11-02T11:46:01.792Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:46:01.916Z] 前端请求获取最新账号数据
+[2025-11-02T11:46:01.917Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:47:36.732Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:47:36.732Z] 启动账号管理页面...
+[2025-11-02T11:47:38.800Z] 前端请求获取最新账号数据
+[2025-11-02T11:47:38.800Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:47:38.937Z] 前端请求获取最新账号数据
+[2025-11-02T11:47:38.938Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:50:07.597Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T11:50:07.598Z] 启动账号管理页面...
+[2025-11-02T11:50:09.631Z] 前端请求获取最新账号数据
+[2025-11-02T11:50:09.631Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T11:50:09.772Z] 前端请求获取最新账号数据
+[2025-11-02T11:50:09.773Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:17:40.576Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T12:17:40.576Z] 启动账号管理页面...
+[2025-11-02T12:17:42.942Z] 前端请求获取最新账号数据
+[2025-11-02T12:17:42.942Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:17:43.054Z] 前端请求获取最新账号数据
+[2025-11-02T12:17:43.054Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:18:04.198Z] 账号管理页面已关闭，检查是否有待处理的更新...
+[2025-11-02T12:18:04.199Z] 没有找到待更新信息文件，跳过更新检查
+[2025-11-02T12:19:17.789Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T12:19:17.789Z] 启动账号管理页面...
+[2025-11-02T12:19:20.063Z] 前端请求获取最新账号数据
+[2025-11-02T12:19:20.063Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:19:20.171Z] 前端请求获取最新账号数据
+[2025-11-02T12:19:20.171Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:22:15.446Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T12:22:15.446Z] 启动账号管理页面...
+[2025-11-02T12:22:17.714Z] 前端请求获取最新账号数据
+[2025-11-02T12:22:17.715Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:22:17.839Z] 前端请求获取最新账号数据
+[2025-11-02T12:22:17.840Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:24:09.020Z] 更新信息已保存到临时文件: /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/pending-updates.json
+[2025-11-02T12:27:54.550Z] 账号管理页面已关闭，检查是否有待处理的更新...
+[2025-11-02T12:27:54.551Z] 正在读取更新信息文件...
+[2025-11-02T12:27:54.552Z] 发现待处理更新: 版本 v1.0.0，共 15 个文件
+[2025-11-02T12:27:54.552Z] 开始处理系统更新，版本: v1.0.0
+[2025-11-02T12:27:54.552Z] 准备更新 15 个文件...
+[2025-11-02T12:27:54.553Z] 正在下载: dist/account-manager.html -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/account-manager.html
+[2025-11-02T12:27:56.795Z] 更新文件 dist/account-manager.html 失败: 下载失败: 301
+[2025-11-02T12:27:56.795Z] 正在下载: dist/account-manager.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/account-manager.js
+[2025-11-02T12:27:59.879Z] 更新文件 dist/account-manager.js 失败: 下载失败: 403
+[2025-11-02T12:27:59.880Z] 正在下载: dist/chrome-debug-card.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-card.js
+[2025-11-02T12:28:01.106Z] 更新文件 dist/chrome-debug-card.js 失败: 下载失败: 403
+[2025-11-02T12:28:01.106Z] 正在下载: dist/chrome-debug-config-auto.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-config-auto.js
+[2025-11-02T12:28:02.177Z] 更新文件 dist/chrome-debug-config-auto.js 失败: 下载失败: 403
+[2025-11-02T12:28:02.177Z] 正在下载: dist/chrome-debug-tag.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-tag.js
+[2025-11-02T12:28:05.204Z] 更新文件 dist/chrome-debug-tag.js 失败: 下载失败: 403
+[2025-11-02T12:28:05.205Z] 正在下载: dist/chrome-debug-uploader.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-uploader.js
+[2025-11-02T12:28:08.070Z] 更新文件 dist/chrome-debug-uploader.js 失败: 下载失败: 403
+[2025-11-02T12:28:08.070Z] 正在下载: dist/chrome-debug-video-batch-delete-pure.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-video-batch-delete-pure.js
+[2025-11-02T12:28:09.711Z] 更新文件 dist/chrome-debug-video-batch-delete-pure.js 失败: 下载失败: 403
+[2025-11-02T12:28:09.711Z] 正在下载: dist/error.log -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/error.log
+[2025-11-02T12:28:11.278Z] 更新文件 dist/error.log 失败: 下载失败: 403
+[2025-11-02T12:28:11.278Z] 正在下载: dist/index.html -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/index.html
+[2025-11-02T12:28:12.142Z] 更新文件 dist/index.html 失败: 下载失败: 403
+[2025-11-02T12:28:12.142Z] 正在下载: dist/package.json -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/package.json
+[2025-11-02T12:28:13.088Z] 更新文件 dist/package.json 失败: 下载失败: 403
+[2025-11-02T12:28:13.089Z] 正在下载: dist/start.bat -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/start.bat
+[2025-11-02T12:28:15.034Z] 更新文件 dist/start.bat 失败: 下载失败: 403
+[2025-11-02T12:28:15.035Z] 正在下载: dist/update-manager.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/update-manager.js
+[2025-11-02T12:28:16.020Z] 更新文件 dist/update-manager.js 失败: 下载失败: 403
+[2025-11-02T12:28:16.020Z] 正在下载: dist/update-manifest.json -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/update-manifest.json
+[2025-11-02T12:28:17.081Z] 更新文件 dist/update-manifest.json 失败: 下载失败: 403
+[2025-11-02T12:28:17.081Z] 正在下载: dist/wechat-mp-auto-injector.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/wechat-mp-auto-injector.js
+[2025-11-02T12:28:18.215Z] 更新文件 dist/wechat-mp-auto-injector.js 失败: 下载失败: 403
+[2025-11-02T12:28:18.215Z] 正在下载: dist/wechat-mp-puppeteer-controller.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/wechat-mp-puppeteer-controller.js
+[2025-11-02T12:28:19.231Z] 更新文件 dist/wechat-mp-puppeteer-controller.js 失败: 下载失败: 403
+[2025-11-02T12:28:19.231Z] 更新完成 - 成功: 0, 失败: 15
+[2025-11-02T12:28:19.232Z] 更新信息临时文件已删除
+[2025-11-02T12:35:01.947Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T12:35:01.947Z] 启动账号管理页面...
+[2025-11-02T12:35:04.229Z] 前端请求获取最新账号数据
+[2025-11-02T12:35:04.229Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:35:04.372Z] 前端请求获取最新账号数据
+[2025-11-02T12:35:04.372Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:35:07.851Z] 更新信息已保存到临时文件: /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/pending-updates.json
+[2025-11-02T12:35:20.660Z] 账号管理页面已关闭，检查是否有待处理的更新...
+[2025-11-02T12:35:20.661Z] 正在读取更新信息文件...
+[2025-11-02T12:35:20.662Z] 发现待处理更新: 版本 v1.0.0，共 15 个文件
+[2025-11-02T12:35:20.662Z] 开始处理系统更新，版本: v1.0.0
+[2025-11-02T12:35:20.662Z] 准备更新 15 个文件...
+[2025-11-02T12:35:20.662Z] 正在下载: dist/account-manager.html -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/account-manager.html
+[2025-11-02T12:35:22.661Z] 更新文件 dist/account-manager.html 失败: 下载失败: 404
+[2025-11-02T12:35:22.661Z] 正在下载: dist/account-manager.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/account-manager.js
+[2025-11-02T12:35:24.932Z] 更新文件 dist/account-manager.js 失败: 下载失败: 404
+[2025-11-02T12:35:24.933Z] 正在下载: dist/chrome-debug-card.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-card.js
+[2025-11-02T12:35:25.954Z] 更新文件 dist/chrome-debug-card.js 失败: 下载失败: 404
+[2025-11-02T12:35:25.955Z] 正在下载: dist/chrome-debug-config-auto.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-config-auto.js
+[2025-11-02T12:35:26.973Z] 更新文件 dist/chrome-debug-config-auto.js 失败: 下载失败: 404
+[2025-11-02T12:35:26.973Z] 正在下载: dist/chrome-debug-tag.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-tag.js
+[2025-11-02T12:35:28.236Z] 更新文件 dist/chrome-debug-tag.js 失败: 下载失败: 404
+[2025-11-02T12:35:28.237Z] 正在下载: dist/chrome-debug-uploader.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-uploader.js
+[2025-11-02T12:35:29.421Z] 更新文件 dist/chrome-debug-uploader.js 失败: 下载失败: 404
+[2025-11-02T12:35:29.422Z] 正在下载: dist/chrome-debug-video-batch-delete-pure.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-video-batch-delete-pure.js
+[2025-11-02T12:35:31.058Z] 更新文件 dist/chrome-debug-video-batch-delete-pure.js 失败: 下载失败: 404
+[2025-11-02T12:35:31.059Z] 正在下载: dist/error.log -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/error.log
+[2025-11-02T12:35:32.699Z] 更新文件 dist/error.log 失败: 下载失败: 404
+[2025-11-02T12:35:32.700Z] 正在下载: dist/index.html -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/index.html
+[2025-11-02T12:35:33.925Z] 更新文件 dist/index.html 失败: 下载失败: 404
+[2025-11-02T12:35:33.925Z] 正在下载: dist/package.json -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/package.json
+[2025-11-02T12:35:35.219Z] 更新文件 dist/package.json 失败: 下载失败: 404
+[2025-11-02T12:35:35.220Z] 正在下载: dist/start.bat -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/start.bat
+[2025-11-02T12:35:37.409Z] 更新文件 dist/start.bat 失败: 下载失败: 403
+[2025-11-02T12:35:37.410Z] 正在下载: dist/update-manager.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/update-manager.js
+[2025-11-02T12:35:43.162Z] 更新文件 dist/update-manager.js 失败: 下载失败: 404
+[2025-11-02T12:35:43.163Z] 正在下载: dist/update-manifest.json -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/update-manifest.json
+[2025-11-02T12:35:44.267Z] 更新文件 dist/update-manifest.json 失败: 下载失败: 404
+[2025-11-02T12:35:44.268Z] 正在下载: dist/wechat-mp-auto-injector.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/wechat-mp-auto-injector.js
+[2025-11-02T12:35:45.478Z] 更新文件 dist/wechat-mp-auto-injector.js 失败: 下载失败: 404
+[2025-11-02T12:35:45.479Z] 正在下载: dist/wechat-mp-puppeteer-controller.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/wechat-mp-puppeteer-controller.js
+[2025-11-02T12:35:47.665Z] 更新文件 dist/wechat-mp-puppeteer-controller.js 失败: 下载失败: 404
+[2025-11-02T12:35:47.666Z] 更新完成 - 成功: 0, 失败: 15
+[2025-11-02T12:35:47.667Z] 更新信息临时文件已删除
+[2025-11-02T12:36:44.901Z] 微信公众号自动控制器启动 - 账号管理模式
+[2025-11-02T12:36:44.901Z] 启动账号管理页面...
+[2025-11-02T12:36:47.184Z] 前端请求获取最新账号数据
+[2025-11-02T12:36:47.185Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:36:47.293Z] 前端请求获取最新账号数据
+[2025-11-02T12:36:47.294Z] 成功获取最新账号数据，共3个账号
+[2025-11-02T12:37:02.417Z] 更新信息已保存到临时文件: /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/pending-updates.json
+[2025-11-02T12:37:05.066Z] 账号管理页面已关闭，检查是否有待处理的更新...
+[2025-11-02T12:37:05.067Z] 正在读取更新信息文件...
+[2025-11-02T12:37:05.067Z] 发现待处理更新: 版本 v1.0.0，共 15 个文件
+[2025-11-02T12:37:05.067Z] 开始处理系统更新，版本: v1.0.0
+[2025-11-02T12:37:05.067Z] 准备更新 15 个文件...
+[2025-11-02T12:37:05.067Z] 正在下载: dist/account-manager.html -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/account-manager.html
+[2025-11-02T12:37:06.909Z] 成功更新: dist/account-manager.html
+[2025-11-02T12:37:06.909Z] 正在下载: dist/account-manager.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/account-manager.js
+[2025-11-02T12:37:07.832Z] 成功更新: dist/account-manager.js
+[2025-11-02T12:37:07.832Z] 正在下载: dist/chrome-debug-card.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-card.js
+[2025-11-02T12:37:13.245Z] 成功更新: dist/chrome-debug-card.js
+[2025-11-02T12:37:13.245Z] 正在下载: dist/chrome-debug-config-auto.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-config-auto.js
+[2025-11-02T12:37:13.935Z] 成功更新: dist/chrome-debug-config-auto.js
+[2025-11-02T12:37:13.935Z] 正在下载: dist/chrome-debug-tag.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-tag.js
+[2025-11-02T12:37:16.081Z] 成功更新: dist/chrome-debug-tag.js
+[2025-11-02T12:37:16.082Z] 正在下载: dist/chrome-debug-uploader.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-uploader.js
+[2025-11-02T12:37:17.069Z] 成功更新: dist/chrome-debug-uploader.js
+[2025-11-02T12:37:17.071Z] 正在下载: dist/chrome-debug-video-batch-delete-pure.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/chrome-debug-video-batch-delete-pure.js
+[2025-11-02T12:37:18.651Z] 成功更新: dist/chrome-debug-video-batch-delete-pure.js
+[2025-11-02T12:37:18.651Z] 正在下载: dist/error.log -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/error.log
+[2025-11-02T12:37:19.776Z] 更新文件 dist/error.log 失败: 下载失败: 404
+[2025-11-02T12:37:19.776Z] 正在下载: dist/index.html -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/index.html
+[2025-11-02T12:37:26.103Z] 成功更新: dist/index.html
+[2025-11-02T12:37:26.104Z] 正在下载: dist/package.json -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/package.json
+[2025-11-02T12:37:27.182Z] 成功更新: dist/package.json
+[2025-11-02T12:37:27.182Z] 正在下载: dist/start.bat -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/start.bat
+[2025-11-02T12:37:27.867Z] 更新文件 dist/start.bat 失败: 下载失败: 403
+[2025-11-02T12:37:27.867Z] 正在下载: dist/update-manager.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/update-manager.js
+[2025-11-02T12:37:28.850Z] 成功更新: dist/update-manager.js
+[2025-11-02T12:37:28.851Z] 正在下载: dist/update-manifest.json -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/update-manifest.json
+[2025-11-02T12:37:29.333Z] 成功更新: dist/update-manifest.json
+[2025-11-02T12:37:29.333Z] 正在下载: dist/wechat-mp-auto-injector.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/wechat-mp-auto-injector.js
+[2025-11-02T12:37:29.972Z] 成功更新: dist/wechat-mp-auto-injector.js
+[2025-11-02T12:37:29.973Z] 正在下载: dist/wechat-mp-puppeteer-controller.js -> /Users/liqiang/Documents/Life/03-AI/992-WeChat-Web-Batch/wechat-mp-video-uploader-browser/dist/wechat-mp-puppeteer-controller.js
+[2025-11-02T12:37:30.950Z] 成功更新: dist/wechat-mp-puppeteer-controller.js
+[2025-11-02T12:37:30.950Z] 更新完成 - 成功: 13, 失败: 2
+[2025-11-02T12:37:30.951Z] 更新信息临时文件已删除

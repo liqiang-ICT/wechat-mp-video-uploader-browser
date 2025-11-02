@@ -1,6 +1,10 @@
 *.zip
 *.log
+.DS_Store
 accounts-data.json
-dist/*
+dist/*.log
+dist/user-data/*
+dist/accounts-data.json
+dist/.DS_Store
 node_modules/*
 user-data/*

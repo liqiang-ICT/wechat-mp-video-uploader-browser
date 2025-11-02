@@ -599,7 +599,7 @@
         updateSystemBtn.addEventListener('click', () => {
             updateModal.style.display = 'flex';
             // 默认上次更新的版本号
-            versionInput.value = 'v1.0.0';
+            versionInput.value = 'v1.0.1';
             versionInput.focus();
         });
         
@@ -630,15 +630,12 @@
             }
             
             try {
-                updateStatus.innerHTML += '<br>正在检查更新...';
+                updateStatus.innerHTML = '正在检查更新...';
                 updateStatus.className = 'status-message info';
                 confirmUpdateBtn.disabled = true;
                 
                 // 这里实现通过jsdelivr获取文件并更新本地文件的逻辑
                 await performSystemUpdate(version);
-                
-                updateStatus.innerHTML += '<br>更新成功！请重启应用更新。';
-                updateStatus.className = 'status-message success';
                 
             } catch (error) {
                 updateStatus.innerHTML += `<br>更新失败: ${error.message}`;
@@ -698,8 +695,8 @@
                 version: version,
                 timestamp: new Date().toISOString(),
                 files: validFiles.map(file => ({
-                     path: file,
-                     url: `https://cdn.jsdelivr.net/gh/${githubRepo}@${version}/dist/${file}`
+                     path: file.replace('dist/', ''),
+                     url: `https://cdn.jsdelivr.net/gh/${githubRepo}@${version}/dist/${file.replace('dist/', '')}`
                   }))
             };
             
@@ -711,7 +708,7 @@
                 await window.writeUpdateInfoToTempFile(JSON.stringify(updateInfo));
             }
             
-            updateStatus.innerHTML += '<br>更新文件清单已保存，正在关闭页面...';
+            updateStatus.innerHTML += '<br>更新文件清单已保存，请关闭本页面，等待更新';
             updateStatus.className = 'status-message success';
             
             // 延迟一秒后关闭页面
@@ -725,6 +722,7 @@
                         window.notifyBackendForUpdates();
                     }
                 }
+                window.close();
             }, 1000);
             
         } catch (error) {

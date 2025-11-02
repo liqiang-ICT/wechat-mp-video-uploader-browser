@@ -1,9 +1,9 @@
 {
-  "version": 1762089680442,
+  "version": 1762090415968,
   "files": {
     "dist/account-manager.html": {
-      "hash": "69828da30220f1777db2631e069675525d1712de2e46328ab830f9da635e30fa",
-      "size": 38743
+      "hash": "47eb253100824289fdf9afc3389daf4b60c153220f4a09a20c7a347de61622a4",
+      "size": 38570
     },
     "dist/account-manager.js": {
       "hash": "18603b8c24e20e4195e68d577f94beedec37e1235c19422a65c8cbfb8190f876",
@@ -42,7 +42,7 @@
       "size": 3776
     },
     "dist/update-manifest.json": {
-      "hash": "f8abd1cd913191ebd3c7a35d8b46c70ad099444c9cee44f5e8564368cd927551",
+      "hash": "c55b4f06d0cefe6437ae55a5476c6ce6323a5aef8783702eeab5bcb5bb08c35e",
       "size": 1933
     },
     "dist/wechat-mp-auto-injector.js": {
@@ -50,8 +50,8 @@
       "size": 4545
     },
     "dist/wechat-mp-puppeteer-controller.js": {
-      "hash": "7ea6b4ac3473a5896f28574040ab8d225151440a4ed83b39245e301b8159ef50",
-      "size": 24816
+      "hash": "07b2d106b0e12a76e991e919a155720d65a289fd4bfb634df30c543c07762674",
+      "size": 24902
     }
   }
 }

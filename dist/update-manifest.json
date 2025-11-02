@@ -1,5 +1,5 @@
 {
-  "version": 1762068750386,
+  "version": 1762071228323,
   "files": {
     "dist/account-manager.html": {
       "hash": "dfc3ff700012677e1c675526e98b544df97c63e2d34f9e6db13743b629e6aa82",
@@ -29,10 +29,6 @@
       "hash": "971cbf43f14f2a42d50b9ef2cbfefa9441bf08b30b0ab2ef21013b7c755d6f75",
       "size": 2510
     },
-    "dist/error.log": {
-      "hash": "f89967aa83fe4009a2ef23fc77569f4d5c45fb1a638683c952dda75bf5c459a8",
-      "size": 37889
-    },
     "dist/index.html": {
       "hash": "3f8b98c178ddd6ae20eeefadd6a13256893a3a351710d8049dc4c4365fd5d6a2",
       "size": 1730
@@ -41,17 +37,13 @@
       "hash": "e684aa48b9f523293c3d4f01180a5f05382f588db9bf32e9af1ca1d030b3adcd",
       "size": 937
     },
-    "dist/start.bat": {
-      "hash": "5a8becc5aa29c65c9fd982103b25b23e8bd5748153713fbc044968c174cdcaef",
-      "size": 38
-    },
     "dist/update-manager.js": {
       "hash": "a9b9b61e98c6052c9915aeab88da35eec1254e3b24ecc545b88f18daecfc4ec1",
       "size": 3782
     },
     "dist/update-manifest.json": {
-      "hash": "477f97eb1de26b1e23936de3b0d1ed856f2041c99b61a61c39ff7d9afd05a7a6",
-      "size": 1779
+      "hash": "b2dc1000af4b6e07aa23f4e410ca83ebc6b3d46dd38cbc01f3b8e4c317701a62",
+      "size": 2196
     },
     "dist/wechat-mp-auto-injector.js": {
       "hash": "cf7c7b3ab2d5adab6ee6967fafcd6a82377ff74e37441b670b2ac93233d91080",

@@ -1,9 +1,9 @@
 {
-  "version": 1762071228323,
+  "version": 1762087345049,
   "files": {
     "dist/account-manager.html": {
-      "hash": "dfc3ff700012677e1c675526e98b544df97c63e2d34f9e6db13743b629e6aa82",
-      "size": 26706
+      "hash": "e30e2f83c49f983de06f639c9850d0fea94eae811fdf31ce9b79c52b4b251dbb",
+      "size": 38662
     },
     "dist/account-manager.js": {
       "hash": "18603b8c24e20e4195e68d577f94beedec37e1235c19422a65c8cbfb8190f876",
@@ -38,20 +38,20 @@
       "size": 937
     },
     "dist/update-manager.js": {
-      "hash": "a9b9b61e98c6052c9915aeab88da35eec1254e3b24ecc545b88f18daecfc4ec1",
-      "size": 3782
+      "hash": "72037bc62e4a353db6288e92c6924cd991b94391f4f637f2fc1512377d49cf1e",
+      "size": 3776
     },
     "dist/update-manifest.json": {
-      "hash": "b2dc1000af4b6e07aa23f4e410ca83ebc6b3d46dd38cbc01f3b8e4c317701a62",
-      "size": 2196
+      "hash": "ab4cf28e48fd772137ad4f4713be80f4b8287a5d3c51e82c8998ff17181c0661",
+      "size": 1933
     },
     "dist/wechat-mp-auto-injector.js": {
       "hash": "cf7c7b3ab2d5adab6ee6967fafcd6a82377ff74e37441b670b2ac93233d91080",
       "size": 4545
     },
     "dist/wechat-mp-puppeteer-controller.js": {
-      "hash": "b3e8064735374837e48bd0f4e54117c777be7cac7fc2d629ac188ea713ebca59",
-      "size": 22399
+      "hash": "7ea6b4ac3473a5896f28574040ab8d225151440a4ed83b39245e301b8159ef50",
+      "size": 24816
     }
   }
 }

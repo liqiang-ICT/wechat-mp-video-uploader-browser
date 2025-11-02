@@ -326,6 +326,13 @@ async function processPendingUpdates() {
                 const https = require('https');
                 
                 await new Promise((resolve, reject) => {
+                    // 如果是当前执行的文件，跳过下载
+                    if (file.path === path.basename(__filename)) {
+                        log(`跳过当前文件: ${file.path}`);
+                        resolve();
+                        return;
+                    }
+                    
                     const fileStream = fs.createWriteStream(targetFilePath);
                     
                     https.get(file.url, (response) => {

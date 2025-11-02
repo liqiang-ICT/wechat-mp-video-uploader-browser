@@ -1,5 +1,5 @@
 {
-  "version": 1762054498084,
+  "version": 1762058958086,
   "files": {
     "dist/account-manager.html": {
       "hash": "dfc3ff700012677e1c675526e98b544df97c63e2d34f9e6db13743b629e6aa82",
@@ -8,10 +8,6 @@
     "dist/account-manager.js": {
       "hash": "18603b8c24e20e4195e68d577f94beedec37e1235c19422a65c8cbfb8190f876",
       "size": 2549
-    },
-    "dist/accounts-data.json": {
-      "hash": "526e0b14f434b234043352ee0b6b489fa139f4f4aa37e5e1f0e00282ceeccaf1",
-      "size": 500
     },
     "dist/chrome-debug-card.js": {
       "hash": "069395d02cacb694d5b29afe5bcbee138f9f6ca6a0d35a04be0577512c33a1c6",

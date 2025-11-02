@@ -6,7 +6,7 @@ const axios = require('axios');
 // 默认配置，可通过 update-config.json 覆盖
 const DEFAULT_CONFIG = {
   // 托管在 GitHub 的清单地址（请替换为你的仓库路径或使用 set-url 命令）
-  manifestUrl: 'https://cdn.jsdelivr.net/gh/<你的用户名>/<仓库名>@latest/update-manifest.json',
+  manifestUrl: 'https://cdn.jsdelivr.net/gh/liqiang-ICT/wechat-mp-video-uploader-browser@latest/update-manifest.json',
   // 需要检查更新的目录（仅 dist）
   watchDirs: ['dist'],
   // 忽略文件列表

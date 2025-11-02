@@ -18,6 +18,8 @@ module.exports = {
     'chrome-debug-tag': './chrome-debug-tag.js',
     'chrome-debug-card': './chrome-debug-card.js',
     'wechat-mp-auto-injector': './wechat-mp-auto-injector.js',
+    'update-manager': './update-manager.js',
+    'update-manifest': './update-manifest.json',
     'chrome-debug-video-batch-delete-pure': './chrome-debug-video-batch-delete-pure.js'
   },
   output: {

@@ -19,7 +19,6 @@ module.exports = {
     'chrome-debug-card': './chrome-debug-card.js',
     'wechat-mp-auto-injector': './wechat-mp-auto-injector.js',
     'update-manager': './update-manager.js',
-    'update-manifest': './update-manifest.json',
     'chrome-debug-video-batch-delete-pure': './chrome-debug-video-batch-delete-pure.js'
   },
   output: {
@@ -50,6 +49,8 @@ module.exports = {
         patterns: [
           { from: 'account-manager.html', to: '.' },
           { from: 'index.html', to: '.' },
+          { from: 'update-manifest.json', to: '.' },
+          { from: 'package.json', to: '.' },
           // 移除JS文件，这些文件现在通过webpack处理和压缩
         ]
       })

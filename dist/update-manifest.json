@@ -1,5 +1,5 @@
 {
-  "version": 1762067793013,
+  "version": 1762059520131,
   "files": {
     "dist/account-manager.html": {
       "hash": "dfc3ff700012677e1c675526e98b544df97c63e2d34f9e6db13743b629e6aa82",
@@ -37,21 +37,9 @@
       "hash": "3f8b98c178ddd6ae20eeefadd6a13256893a3a351710d8049dc4c4365fd5d6a2",
       "size": 1730
     },
-    "dist/package.json": {
-      "hash": "e684aa48b9f523293c3d4f01180a5f05382f588db9bf32e9af1ca1d030b3adcd",
-      "size": 937
-    },
     "dist/start.bat": {
       "hash": "5a8becc5aa29c65c9fd982103b25b23e8bd5748153713fbc044968c174cdcaef",
       "size": 38
-    },
-    "dist/update-manager.js": {
-      "hash": "a9b9b61e98c6052c9915aeab88da35eec1254e3b24ecc545b88f18daecfc4ec1",
-      "size": 3782
-    },
-    "dist/update-manifest.json": {
-      "hash": "477f97eb1de26b1e23936de3b0d1ed856f2041c99b61a61c39ff7d9afd05a7a6",
-      "size": 1779
     },
     "dist/wechat-mp-auto-injector.js": {
       "hash": "cf7c7b3ab2d5adab6ee6967fafcd6a82377ff74e37441b670b2ac93233d91080",

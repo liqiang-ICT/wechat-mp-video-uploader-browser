@@ -10,7 +10,7 @@ const DEFAULT_CONFIG = {
   // 需要检查更新的目录（仅 dist）
   watchDirs: ['dist'],
   // 忽略文件列表
-  ignoreFiles: ['.DS_Store', 'user-data/*', '*.log', '*.bat', 'accounts-data.json']
+  ignoreFiles: ['.DS_Store', 'error.log', 'start.bat', 'accounts-data.json']
 };
 
 function loadUserConfig() {

@@ -180,7 +180,7 @@ async function selectVideoByTitle(titleText) {
         '.more-video__list.more-video__list_double'
     ];
 
-    const videoList = await waitForElement(videoListSelectors);
+    let videoList = await waitForElement(videoListSelectors);
     if (videoList) {
         // 遍历视频列表，查找标题匹配的视频
         let videos = videoList.querySelectorAll('.more-video__item');
@@ -189,29 +189,77 @@ async function selectVideoByTitle(titleText) {
             await wait(1000);
             videos = videoList.querySelectorAll('.more-video__item');
         }
-        appendDebugInfo(`视频列表中找到 ${videos.length} 个视频`);
-        for (const video of videos) {
-            const videoTitle = video.querySelector('.more-video__item-title').textContent.trim();
-            if (videoTitle.includes(titleText)) {
-                tryClickElement(video.querySelector('.more-video__item-content'), `标题匹配视频: ${videoTitle}`);
-                appendDebugInfo(`已选择标题匹配视频: ${videoTitle}`);
+        // 增加翻页的逻辑，如果当前页的视频中没找到，则点击下一页按钮继续查找
+        let videoFound = false;
+        while (!videoFound) {
+            appendDebugInfo(`视频列表中找到 ${videos.length} 个视频`);
+            for (const video of videos) {
+                const videoTitle = video.querySelector('.more-video__item-title').textContent.trim();
+                if (videoTitle.includes(titleText)) {
+                    tryClickElement(video.querySelector('.more-video__item-content'), `标题匹配视频: ${videoTitle}`);
+                    appendDebugInfo(`已选择标题匹配视频: ${videoTitle}`);
 
-                // 步骤9：点击确认按钮
-                const confirmButtonSelectors = [
-                    'div.video-select-dialog > div.weui-desktop-dialog__wrp > div > div.weui-desktop-dialog__ft > div > div:nth-child(3) > button'
-                ];
+                    // 步骤9：点击确认按钮
+                    const confirmButtonSelectors = [
+                        'div.video-select-dialog > div.weui-desktop-dialog__wrp > div > div.weui-desktop-dialog__ft > div > div:nth-child(3) > button'
+                    ];
 
-                const confirmButton = await waitForElement(confirmButtonSelectors);
-                if (confirmButton) {
-                    tryClickElement(confirmButton, '确认选择视频');
-                    appendDebugInfo('已点击确认选择视频');
-                } else {
-                    appendDebugInfo('未找到确认按钮，无法点击');
+                    const confirmButton = await waitForElement(confirmButtonSelectors);
+                    if (confirmButton) {
+                        tryClickElement(confirmButton, '确认选择视频');
+                        appendDebugInfo('已点击确认选择视频');
+                    } else {
+                        appendDebugInfo('未找到确认按钮，无法点击');
+                    }
+                    videoFound = true;
+                    break;
                 }
+            }
+            if (!videoFound) {
+                appendDebugInfo('未找到匹配标题的视频，点击下一页');
+                const pageNavButtonSeletor = ['div.more-video__lib > div.weui-desktop-pagination > span.weui-desktop-pagination__nav'];
+                const pageNav = await waitForElement(pageNavButtonSeletor);
+                if (!pageNav) {
+                    appendDebugInfo('未找到分页导航');
+                    break;
+                }
+                // appendDebugInfo(pageNav);
+                const pageButtonList = pageNav.querySelectorAll('a');
+                if (pageButtonList.length > 0) {
+                    const nextPageButton = pageButtonList[pageButtonList.length - 1];
+                    // 通过文本内容确认是否为“下一页”按钮
+                    if (nextPageButton.textContent.trim() === '下一页') {
+                        tryClickElement(nextPageButton, '下一页按钮');
+                        // 等待视频列表出现
+                        videoList = await waitForElement(videoListSelectors);
+                        if (videoList) {
+                            while (!videoList.checkVisibility()) {
+                                appendDebugInfo('视频列表隐藏，等待加载...');
+                                await wait(500);
+                            }
+                            videos = videoList.querySelectorAll('.more-video__item');
+                            while (videos.length === 0) {
+                                appendDebugInfo('视频列表为空，等待加载...');
+                                await wait(500);
+                                videos = videoList.querySelectorAll('.more-video__item');
+                            }
+                        } else {
+                            appendDebugInfo('等待视频列表加载失败');
+                            break;
+                        }
+                    } else {
+                        appendDebugInfo('未找到下一页按钮，可能已到达最后一页');
+                        break;
+                    }
+                } else {
+                    appendDebugInfo('未找到分页按钮');
+                    break;
+                }
+            } else {
+                appendDebugInfo('找到匹配标题的视频');
                 break;
             }
         }
-        appendDebugInfo('未找到匹配标题的视频');
     } else {
         appendDebugInfo('未找到视频列表，无法根据标题选择视频');
     }
@@ -429,6 +477,30 @@ async function clickArticleReplaceButton(type = '0') {
  */
 async function handleContentDeclaration() {
     appendDebugInfo('正在处理内容声明...');
+
+    // 先关闭”发表后转为视频号视频“配置
+    // 打开”发表后转为视频号视频“配置（#js_import_to_finder .allow_click_opr）
+    const videoNumberSelectors = [
+        '#js_import_to_finder .allow_click_opr'
+    ];
+    const videoNumber = await waitForElement(videoNumberSelectors);
+    if (videoNumber) {
+        tryClickElement(videoNumber, '打开”发表后转为视频号视频“配置');
+        appendDebugInfo('已打开”发表后转为视频号视频“配置');
+    } else {
+        appendDebugInfo('未找到打开”发表后转为视频号视频“配置，无法点击');
+    }
+
+    const closeVideoNumberSelectors = [
+        '#import_finder_0'
+    ];
+    const closeVideoNumber = await waitForElement(closeVideoNumberSelectors);
+    if (closeVideoNumber) {
+        tryClickElement(closeVideoNumber, '关闭”发表后转为视频号视频“配置');
+        appendDebugInfo('已关闭”发表后转为视频号视频“配置');
+    } else {
+        appendDebugInfo('未找到关闭”发表后转为视频号视频“配置，无法点击');
+    }
 
     // 先点开内容声明面板
     const contentDeclarationSelectors = [

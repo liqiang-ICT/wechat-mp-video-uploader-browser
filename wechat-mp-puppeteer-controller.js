@@ -327,6 +327,7 @@ async function processPendingUpdates() {
                 
                 await new Promise((resolve, reject) => {
                     // 如果是当前执行的文件，跳过下载
+                    log(`检查文件是否为当前执行文件: ${file.path}`);
                     if (file.path === path.basename(__filename)) {
                         log(`跳过当前文件: ${file.path}`);
                         resolve();
@@ -418,7 +419,7 @@ const checkAndProcessPage = async (page) => {
         await injectAndExecuteTagScript(page);
     }
     // 检查是否为草稿箱记录管理页
-    else if (currentUrl.includes('cgi-bin/appmsg') && currentUrl.includes('action=list_card')) {
+    else if (currentUrl.includes('cgi-bin/appmsg') && (currentUrl.includes('action=list_card') || currentUrl.includes('action=list&'))) {
         log('检测到草稿箱记录管理页，准备执行草稿箱记录批量管理功能...');
         await injectAndExecuteCardScript(page);
     }
@@ -616,7 +617,7 @@ const injectAndExecuteCardScript = async (page) => {
     try {
         // 检查当前页面是否适合注入脚本
         const currentUrl = page.url();
-        if (!currentUrl.includes('cgi-bin/appmsg') || !currentUrl.includes('action=list_card')) {
+        if (!currentUrl.includes('cgi-bin/appmsg') || !(currentUrl.includes('action=list_card') || currentUrl.includes('action=list&'))) {
             log('警告：当前页面不适合注入草稿箱记录批量管理脚本，跳过注入');
             return;
         }

@@ -117,6 +117,26 @@
     btn.addEventListener('click', performBatchDelete); 
     host.parentElement.appendChild(btn);
     appendLog('主按钮“批量删除”已注入');
+
+    // 优化草稿箱布局
+    // 1. 去除”新的创作“按钮
+    const newCreationBtn = document.querySelector('.weui-desktop-card.weui-desktop-card_new');
+    if (newCreationBtn) {
+      newCreationBtn.remove();
+      appendLog('已移除“新的创作”按钮');
+    } else {
+      appendLog('未找到“新的创作”按钮，无需移除');
+    }
+    // 2. 调整草稿箱卡片布局，草稿标题只占一行
+    const title = document.querySelectorAll('.weui-desktop-publish__cover__title');
+    if (title.length) {
+      title.forEach(item => {
+        item.style.whiteSpace = 'nowrap';
+      });
+      appendLog('已调整草稿箱卡片布局，草稿标题只占一行');
+    } else {
+      appendLog('未找到草稿箱卡片标题，无需调整');
+    }
   }
 
   function init() { appendLog('初始化文章发表记录批量管理脚本...'); injectMainButton(); }

@@ -1,5 +1,5 @@
 {
-  "version": 1762090415968,
+  "version": 1762702119894,
   "files": {
     "dist/account-manager.html": {
       "hash": "47eb253100824289fdf9afc3389daf4b60c153220f4a09a20c7a347de61622a4",
@@ -10,20 +10,20 @@
       "size": 2549
     },
     "dist/chrome-debug-card.js": {
-      "hash": "069395d02cacb694d5b29afe5bcbee138f9f6ca6a0d35a04be0577512c33a1c6",
-      "size": 2621
+      "hash": "85f18db879d6001e03c3d851efe2b62f3e9eece1fe0c4210afc307673e319473",
+      "size": 3046
     },
     "dist/chrome-debug-config-auto.js": {
-      "hash": "493c525ce776b0da3e1c25e20184d1e37e1e20a2ee25e69d790994695a177ac9",
-      "size": 5888
+      "hash": "891ba81a2014829bba2a93f862cbde9c102830aae6ad17b191b42f1b3f66d428",
+      "size": 7156
     },
     "dist/chrome-debug-tag.js": {
       "hash": "20c5bdad6872988dc83008e298c06dcf8571df923f725db0abcf7cee8e662b19",
       "size": 6804
     },
     "dist/chrome-debug-uploader.js": {
-      "hash": "f66163c02d43781efc441ff415c325310335fd43dd701680ff9ee990647a12b1",
-      "size": 24156
+      "hash": "f23318546ff3e21bedcf74f38134b165fc2733bdf80b29e51d797789c9a92c3d",
+      "size": 30840
     },
     "dist/chrome-debug-video-batch-delete-pure.js": {
       "hash": "971cbf43f14f2a42d50b9ef2cbfefa9441bf08b30b0ab2ef21013b7c755d6f75",
@@ -42,7 +42,7 @@
       "size": 3776
     },
     "dist/update-manifest.json": {
-      "hash": "c55b4f06d0cefe6437ae55a5476c6ce6323a5aef8783702eeab5bcb5bb08c35e",
+      "hash": "21e9d14d46535b213c6839e1c06ae7c464fc8d86a9afaf6cfab933090c352404",
       "size": 1933
     },
     "dist/wechat-mp-auto-injector.js": {
@@ -50,8 +50,8 @@
       "size": 4545
     },
     "dist/wechat-mp-puppeteer-controller.js": {
-      "hash": "07b2d106b0e12a76e991e919a155720d65a289fd4bfb634df30c543c07762674",
-      "size": 24902
+      "hash": "047f61f60b5b2dc7b793c64d4f39512c5a1afaad552a48f9cfa1e745bc0f4020",
+      "size": 25017
     }
   }
 }

@@ -3,6 +3,11 @@
 
 console.log('微信公众号视频上传调试工具(视频列表页版本)已加载');
 
+// 全局变量 - 素材缓存
+let _cachedArticles = null;
+let _cachedArticlesTimestamp = null;
+// 不再设置缓存过期时间，素材数据将一直有效，直到页面刷新或手动刷新
+
 /**
  * 显示调试信息
  * @param {string} message - 调试信息内容
@@ -347,7 +352,417 @@ async function collectNonOriginalArticles() {
     return nonOriginalArticles;
 }
 
-// 删除非原创视频的函数
+// 收集所有文章的函数
+async function collectAllArticles() {
+    // 检查缓存是否存在（不再检查过期时间）
+    if (_cachedArticles) {
+        console.log('使用缓存的素材数据');
+        console.log('缓存中的素材数：', _cachedArticles.length);
+        return _cachedArticles;
+    }
+    
+    // 缓存不存在，重新收集
+    console.log('缓存不存在，重新收集素材');
+    const articles = await fetchVideoHistoryRecords(500);
+    console.log('共发现文章数：', articles.length);
+    console.log('文章列表：', articles);
+    if (articles.length === 0) {
+        console.log('未发现文章');
+        // 即使没有文章也缓存空数组，避免短时间内重复请求
+        _cachedArticles = [];
+        _cachedArticlesTimestamp = now;
+        return [];
+    }
+    const allArticles = [];
+    for (const article of articles) {
+        allArticles.push({
+            app_id: article.app_id,
+            title: article.title,
+            publish_time: article.publish_time,
+            is_non_original: article.is_non_original
+        });
+    };
+    
+    // 更新缓存
+    _cachedArticles = allArticles;
+    _cachedArticlesTimestamp = Date.now();
+    console.log('素材已缓存，将一直有效直到页面刷新');
+    
+    return allArticles;
+}
+
+// 创建多选弹窗的函数
+function createMultiSelectDialog(items, title, onConfirm, onCancel) {
+    // 创建弹窗容器
+    const dialogContainer = document.createElement('div');
+    dialogContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+    `;
+
+    // 创建弹窗内容
+    const dialogContent = document.createElement('div');
+    dialogContent.style.cssText = `
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+    `;
+
+    // 创建标题
+    const dialogTitle = document.createElement('h3');
+    dialogTitle.textContent = title || '选择素材';
+    dialogTitle.style.marginTop = '0';
+
+    // 创建滚动区域
+    const scrollArea = document.createElement('div');
+    scrollArea.style.cssText = `
+        flex: 1;
+        overflow-y: auto;
+        margin: 15px 0;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        padding: 10px;
+    `;
+
+    // 创建全选复选框
+    const selectAllContainer = document.createElement('div');
+    selectAllContainer.style.cssText = 'margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee;';
+    
+    const selectAllCheckbox = document.createElement('input');
+    selectAllCheckbox.type = 'checkbox';
+    selectAllCheckbox.id = 'selectAll';
+    
+    const selectAllLabel = document.createElement('label');
+    selectAllLabel.htmlFor = 'selectAll';
+    selectAllLabel.textContent = '全选';
+    selectAllLabel.style.marginLeft = '8px';
+    
+    selectAllContainer.appendChild(selectAllCheckbox);
+    selectAllContainer.appendChild(selectAllLabel);
+    scrollArea.appendChild(selectAllContainer);
+
+    // 创建项目列表
+    const checkboxes = [];
+    items.forEach((item, index) => {
+        const itemContainer = document.createElement('div');
+        itemContainer.style.cssText = 'margin-bottom: 8px;';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `item_${index}`;
+        checkbox.value = item.app_id;
+        checkboxes.push(checkbox);
+        
+        const label = document.createElement('label');
+        label.htmlFor = `item_${index}`;
+        label.textContent = `${item.title}${item.is_non_original === 1 ? ' (非原创)' : ''}`;
+        label.style.marginLeft = '8px';
+        label.style.cursor = 'pointer';
+        
+        itemContainer.appendChild(checkbox);
+        itemContainer.appendChild(label);
+        scrollArea.appendChild(itemContainer);
+    });
+
+    // 创建按钮容器
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.cssText = 'display: flex; justify-content: flex-end; gap: 10px;';
+
+    // 创建取消按钮
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = '取消';
+    cancelButton.style.cssText = `
+        padding: 8px 16px;
+        background-color: #f1f1f1;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    `;
+
+    // 创建确定按钮
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = '确定';
+    confirmButton.style.cssText = `
+        padding: 8px 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    `;
+
+    buttonContainer.appendChild(cancelButton);
+    buttonContainer.appendChild(confirmButton);
+
+    dialogContent.appendChild(dialogTitle);
+    dialogContent.appendChild(scrollArea);
+    dialogContent.appendChild(buttonContainer);
+    dialogContainer.appendChild(dialogContent);
+
+    // 添加事件监听器
+    selectAllCheckbox.addEventListener('change', () => {
+        const isChecked = selectAllCheckbox.checked;
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = isChecked;
+        });
+    });
+
+    cancelButton.addEventListener('click', () => {
+        document.body.removeChild(dialogContainer);
+        if (onCancel) onCancel();
+    });
+
+    confirmButton.addEventListener('click', () => {
+        const selectedItems = [];
+        checkboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                selectedItems.push(items[index]);
+            }
+        });
+        document.body.removeChild(dialogContainer);
+        if (onConfirm) onConfirm(selectedItems);
+    });
+
+    // 点击弹窗外部关闭
+    dialogContainer.addEventListener('click', (e) => {
+        if (e.target === dialogContainer) {
+            document.body.removeChild(dialogContainer);
+            if (onCancel) onCancel();
+        }
+    });
+
+    // 添加到页面
+    document.body.appendChild(dialogContainer);
+}
+
+// 推送精选的函数
+async function pushFeaturedVideos() {
+    // 按钮文字变为“准备中”
+    const pushFeaturedButton = document.querySelector('#pushFeaturedButton');
+    if (pushFeaturedButton) {
+        pushFeaturedButton.disabled = true;
+        // 根据是否有缓存显示不同状态
+        if (_cachedArticles) {
+            pushFeaturedButton.textContent = '加载缓存中...';
+        } else {
+            pushFeaturedButton.textContent = '收集素材中...';
+        }
+    }
+    
+    // 收集所有素材（优先使用缓存）
+    const allArticles = await collectAllArticles();
+    if (allArticles.length === 0) {
+        console.log('未发现素材');
+        if (pushFeaturedButton) {
+            pushFeaturedButton.textContent = '推送精选';
+            pushFeaturedButton.disabled = false;
+        }
+        return;
+    }
+    
+    // 恢复按钮状态
+    if (pushFeaturedButton) {
+        pushFeaturedButton.textContent = '推送精选';
+        pushFeaturedButton.disabled = false;
+    }
+    
+    // 显示多选弹窗
+    const isUsingCache = !!_cachedArticles;
+    
+    // 如果有缓存，显示缓存时间
+    let dialogTitle = '选择素材';
+    if (isUsingCache && _cachedArticlesTimestamp) {
+        dialogTitle = `选择素材 (使用缓存，缓存时间: ${new Date(_cachedArticlesTimestamp).toLocaleTimeString()})`;
+    }
+    
+    createMultiSelectDialog(
+        allArticles,
+        dialogTitle,
+        async (selectedArticles) => {
+            if (selectedArticles.length === 0) {
+                showDebugInfo('未选择任何素材');
+                return;
+            }
+            
+            // 开始推送前更新按钮状态为初始进度
+            if (pushFeaturedButton) {
+                pushFeaturedButton.textContent = `推送精选 (0/${selectedArticles.length})`;
+                pushFeaturedButton.disabled = true;
+            }
+            
+            console.log(`选择了 ${selectedArticles.length} 个素材进行推送`);
+            showDebugInfo(`准备推送 ${selectedArticles.length} 个素材...`);
+            
+            // 获取当前页面的token
+            const currentUrl = window.location.href;
+            const token = getParamFromUrl(currentUrl, 'token');
+            
+            // 串行打开推送链接，等待每个页面配置完成后再打开下一个
+            async function openNextArticle(index) {
+                if (index >= selectedArticles.length) {
+                    // 完成所有推送，恢复按钮状态
+                    if (pushFeaturedButton) {
+                        pushFeaturedButton.textContent = '推送精选';
+                        pushFeaturedButton.disabled = false;
+                    }
+                    showDebugInfo(`推送精选完成，已为 ${selectedArticles.length} 个素材打开推送链接`);
+                    return;
+                }
+                
+                // 更新按钮显示进度
+                if (pushFeaturedButton) {
+                    pushFeaturedButton.textContent = `推送精选 (${index + 1}/${selectedArticles.length})`;
+                    pushFeaturedButton.disabled = true;
+                }
+                
+                const article = selectedArticles[index];
+                try {
+                    const timestamp = Date.now();
+                    const materialId = article.app_id;
+                    const pushUrl = `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&material_type=15&material_id=${materialId}&token=${token}&lang=zh_CN&timestamp=${timestamp}`;
+                    
+                    console.log(`为素材 ${article.title} (ID: ${materialId}) 打开推送链接`);
+                    showDebugInfo(`正在打开第 ${index + 1}/${selectedArticles.length} 个素材: ${article.title}`);
+                    
+                    // 在新标签页中打开链接
+                    const newTab = window.open(pushUrl, '_blank');
+                    
+                    // 监控新页面是否配置完成
+                    await monitorPageConfigComplete(newTab, article.title);
+                    
+                    // 继续打开下一个
+                    await openNextArticle(index + 1);
+                } catch (error) {
+                    console.error(`为素材 ${article.title} 生成推送链接时出错: ${error.message}`);
+                    appendDebugInfo(`推送 ${article.title} 失败: ${error.message}`);
+                    // 出错时也尝试继续处理下一个
+                    await openNextArticle(index + 1);
+                }
+            }
+            
+            // 监控页面配置完成状态
+            async function monitorPageConfigComplete(tab, articleTitle) {
+                return new Promise((resolve) => {
+                    const checkInterval = 2000; // 每2秒检查一次
+                    const maxWaitTime = 5 * 60 * 1000; // 最长等待5分钟
+                    const startTime = Date.now();
+                    let checkCount = 0;
+                    
+                    console.log(`开始监控 ${articleTitle} 的配置完成状态`);
+                    appendDebugInfo(`正在等待 ${articleTitle} 配置完成...`);
+                    
+                    // 监听消息通道，等待子窗口配置完成的通知
+                    window.addEventListener('message', handleMessage, false);
+                    
+                    const intervalId = setInterval(() => {
+                        try {
+                            checkCount++;
+                            
+                            // 检查是否达到最长等待时间
+                            if (Date.now() - startTime > maxWaitTime) {
+                                cleanupAndResolve(`${articleTitle} 配置超时，已超时 ${Math.floor(maxWaitTime / 1000)} 秒`);
+                                return;
+                            }
+                            
+                            // 检查子窗口是否已关闭
+                            if (!tab || tab.closed) {
+                                cleanupAndResolve(`${articleTitle} 的页面已关闭，继续处理下一个`);
+                                return;
+                            }
+                            
+                            // 尝试检查配置完成状态
+                            // 由于跨域安全限制，直接访问tab.window._configAutoCompleted可能会失败
+                            // 我们使用try-catch来处理可能的跨域错误
+                            try {
+                                // 尝试直接访问配置完成标志（可能在同源情况下工作）
+                                if (tab.window && tab.window._configAutoCompleted === true) {
+                                    cleanupAndResolve(`${articleTitle} 配置已完成`);
+                                    return;
+                                }
+                            } catch (crossDomainError) {
+                                // 预期的跨域错误，我们可以尝试其他方式
+                                // 这里我们可以使用postMessage向子窗口发送检查请求
+                                try {
+                                    tab.postMessage({ type: 'CHECK_CONFIG_COMPLETED' }, '*');
+                                } catch (msgError) {
+                                    // 如果postMessage也失败，我们将依赖用户手动操作
+                                }
+                            }
+                            
+                            // 每隔10次检查输出一次状态信息，避免日志过多
+                            if (checkCount % 5 === 0) {
+                                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                                console.log(`已等待 ${elapsed} 秒，继续检查 ${articleTitle} 配置状态...`);
+                                appendDebugInfo(`等待中... (${elapsed}秒)`);
+                            }
+                            
+                        } catch (error) {
+                            console.error(`监控 ${articleTitle} 配置状态时出错: ${error.message}`);
+                        }
+                    }, checkInterval);
+                    
+                    // 清理资源并解析Promise
+                    function cleanupAndResolve(message) {
+                        clearInterval(intervalId);
+                        window.removeEventListener('message', handleMessage);
+                        console.log(message);
+                        appendDebugInfo(message);
+                        resolve();
+                    }
+                    
+                    // 消息处理函数，监听子窗口发来的配置完成通知
+                    function handleMessage(event) {
+                        try {
+                            if (event.data && event.data.type === 'CONFIG_COMPLETED') {
+                                cleanupAndResolve(`${articleTitle} 配置已完成`);
+                            }
+                        } catch (error) {
+                            console.error('处理消息时出错:', error);
+                        }
+                    }
+                    
+                    // 为用户提供一种手动触发下一个素材的方式
+                    // 可以在调试信息中添加一个提示
+                    setTimeout(() => {
+                        appendDebugInfo(`提示: 如需手动继续，请在控制台执行: window.nextArticle()`);
+                    }, 10000);
+                    
+                    // 暴露手动控制函数到window对象
+                    window.nextArticle = function() {
+                        cleanupAndResolve(`${articleTitle} 手动触发继续`);
+                    };
+                });
+            }
+            
+            // 开始串行打开第一个素材
+            if (selectedArticles.length > 0) {
+                await openNextArticle(0);
+            } else {
+                showDebugInfo('没有选择素材进行推送');
+            }
+        },
+        () => {
+            console.log('已取消推送精选操作');
+            showDebugInfo('推送精选操作已取消');
+        }
+    );
+}
+
+// 删除非原创的函数
 async function deleteNonOriginalVideos() {
     // 按钮文字变为“收集非原创文章中”
     const deleteNonOriginalButton = document.querySelector('#deleteNonOriginalButton');
@@ -360,7 +775,7 @@ async function deleteNonOriginalVideos() {
     if (nonOriginalArticles.length === 0) {
         console.log('未发现非原创文章');
         if (deleteNonOriginalButton) {
-            deleteNonOriginalButton.textContent = '删除非原创视频';
+            deleteNonOriginalButton.textContent = '删除非原创';
             deleteNonOriginalButton.disabled = false;
         }
         return;
@@ -370,7 +785,7 @@ async function deleteNonOriginalVideos() {
     if (!confirmDelete) {
         console.log('已取消删除操作');
         if (deleteNonOriginalButton) {
-            deleteNonOriginalButton.textContent = '删除非原创视频';
+            deleteNonOriginalButton.textContent = '删除非原创';
             deleteNonOriginalButton.disabled = false;
         }
         return;
@@ -384,7 +799,7 @@ async function deleteNonOriginalVideos() {
             await deleteSingleArticle(article.app_id, token, currentUrl);
             successCount++;
             // 更新进度
-            if (deleteNonOriginalButton) deleteNonOriginalButton.textContent = `删除非原创视频 (${successCount}/${nonOriginalArticles.length})`;
+            if (deleteNonOriginalButton) deleteNonOriginalButton.textContent = `删除非原创 (${successCount}/${nonOriginalArticles.length})`;
         } catch (error) {
             console.error(`删除失败: ${error.message}`);
         }
@@ -964,7 +1379,7 @@ function initChromeDebugUploader() {
     deleteDirButton.id = 'deleteDirButton';
     deleteDirButton.setAttribute('data-action', 'delete-videos');
 
-    // 创建删除非原创视频按钮
+    // 创建删除非原创按钮
     const deleteNonOriginalButton = document.createElement('button');
     deleteNonOriginalButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
     deleteNonOriginalButton.style.backgroundColor = '#2196F3';
@@ -973,6 +1388,15 @@ function initChromeDebugUploader() {
     deleteNonOriginalButton.id = 'deleteNonOriginalButton';
     deleteNonOriginalButton.setAttribute('data-action', 'delete-non-original-videos');
 
+    // 创建推送精选按钮
+    const pushFeaturedButton = document.createElement('button');
+    pushFeaturedButton.classList.add('weui-desktop-btn', 'weui-desktop-btn_primary');
+    pushFeaturedButton.style.backgroundColor = '#4CAF50';
+    pushFeaturedButton.style.marginLeft = '10px';
+    pushFeaturedButton.textContent = '推送精选';
+    pushFeaturedButton.id = 'pushFeaturedButton';
+    pushFeaturedButton.setAttribute('data-action', 'push-featured-videos');
+
     // 组装元素
     container.appendChild(selectFileButton);
     container.appendChild(selectDirButton);
@@ -980,6 +1404,7 @@ function initChromeDebugUploader() {
     container.appendChild(dirInput);
     container.appendChild(deleteDirButton);
     container.appendChild(deleteNonOriginalButton);
+    container.appendChild(pushFeaturedButton);
     // container.appendChild(debugInfo);
 
     // 添加到目标元素后面
@@ -1202,10 +1627,17 @@ function initChromeDebugUploader() {
     });
 
     deleteNonOriginalButton.addEventListener('click', () => {
-        console.log('点击删除非原创视频按钮');
-        showDebugInfo('按钮被点击，删除非原创视频...');
-        // 调用删除非原创视频的函数
+        console.log('点击删除非原创按钮');
+        showDebugInfo('按钮被点击，删除非原创...');
+        // 调用删除非原创的函数
         deleteNonOriginalVideos();
+    });
+
+    pushFeaturedButton.addEventListener('click', () => {
+        console.log('点击推送精选按钮');
+        showDebugInfo('按钮被点击，推送精选...');
+        // 调用推送精选的函数
+        pushFeaturedVideos();
     });
 
     console.log('Chrome调试工具视频上传悬浮按钮已成功创建');
